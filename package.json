@@ -1,0 +1,24 @@
+{
+  "name": "pod2mindmap",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@polymer/paper-button": "^3.0.1",
+    "@polymer/paper-input": "^3.0.1",
+    "@vaadin/vaadin-split-layout": "^4.1.0",
+    "evejs": "github:scenaristeur/evejs",
+    "heavy-navbar": "0.0.9",
+    "lit-element": "^2.0.1",
+    "rdflib": "^0.19.1",
+    "solid-auth-client": "^2.3.0",
+    "solid-file-client": "^0.4.9",
+    "vis": "^4.21.0"
+  }
+}
