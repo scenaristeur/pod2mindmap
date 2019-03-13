@@ -11,6 +11,8 @@ import  'solid-file-client/dist/browser/solid-file-client.bundle.js';
 import './my-nav.js';
 import './my-element.js';
 import './my-second.js';
+import './p2m-source.js';
+import './p2m-dialog.js';
 
 class MyPrincipal extends LitElement{
   render(){
@@ -25,13 +27,18 @@ class MyPrincipal extends LitElement{
     </div>-->
     <vaadin-split-layout orientation="vertical">
     <div>Folder</div>
-    <div><my-element></my-element></div>
+    <div>
+    <my-element></my-element>
+    </div>
     </vaadin-split-layout>
 
     <div style="width: 50%;">
     <my-second>Chargement du Graphe</my-second>
     </div>
     </vaadin-split-layout>
+
+    <p2m-source></p2m-source>
+    <p2m-dialog></p2m-dialog>
     `;
   }
 }
