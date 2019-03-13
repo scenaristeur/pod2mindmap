@@ -13,6 +13,7 @@ import './my-element.js';
 import './my-second.js';
 import './p2m-source.js';
 import './p2m-dialog.js';
+import './solid/solid-explore.js';
 
 class MyPrincipal extends LitElement{
   render(){
@@ -39,6 +40,7 @@ class MyPrincipal extends LitElement{
 
     <p2m-source></p2m-source>
     <p2m-dialog></p2m-dialog>
+    <solid-explore></solid-explore>
     `;
   }
 }

@@ -65,10 +65,15 @@ class P2mDialog extends LitElement {
       border-color: #5394ed;
       padding:1px;
     }
-    </style>
+    .large {
+      position: absolute;
+      z-index: 99;
+      top: 10%;
+      left: 1vw;
+      width: 99vw;
 
-    Dialog
-    <paper-button  @click="${() =>  this.too()}" >open</paper-button>
+    }
+    </style>
 
     <paper-dialog id="nodePopUp" class="popup" backdrop transition="core-transition-bottom"  >
     <!--  <div horizontal start-justified start layout > -->
@@ -254,8 +259,7 @@ class P2mDialog extends LitElement {
 
     <paper-dialog
     id="accueilPopup"
-
-    class="popup"
+    class="popup large"
     backdrop transition="core-transition-bottom"  iron-overlay-opened="fillTextToSave"><!-- on-iron-overlay-opened="_myOpenFunction"
     on-iron-overlay-closed="_myClosedFunction" -->
     <h2  style="margin: 0;color: #0D578B;"> POD to Mindmap
@@ -282,68 +286,63 @@ class P2mDialog extends LitElement {
       html`  <paper-button raised @click="${() =>  this.explore()}"  dialog-confirm>Explorer</paper-button>`:
       html`<p>Selectionnez un Provider</p>
       ${this.providers.map(i => html`
-          <paper-item raised @click="${(e) =>  this.get(i)}"> <img src="./assets/folder.png" />${i.name}</paper-item>
-           `)}
-           `}
+        <paper-item raised @click="${(e) =>  this.get(i)}"> <img src="./assets/folder.png" />${i.name}</paper-item>
+        `)}
+        `}
 
+        <solid-login>Solid Login</solid-login>
+        <br>
+        </div>
+        </paper-dialog>
+        `;
+      }
 
+      // properties getter
+      static get properties() {
+        return {
+          foo: { type: String },
+          params: {type: Object},
+          providers: {type: Array},
+          isValidUrl: {type: Boolean}
+        };
+      }
 
-    <solid-login>Solid Login</solid-login>
-    <br>
-    </div>
-    </paper-dialog>
-    `;
-  }
+      constructor() {
+        // Always call super() first
+        super();
+        this.foo = 'Hello World';
+        this.agentDialog = new DialogAgent("agentDialog", this);
+        console.log(this.agentDialog);
+        this.params = {};
+        this.isValidUrl = false;
+        this.providers = [{name:"solid community", suffix:"solid.community"}, {name:"Inrupt", suffix:"inrupt.net"}, {name:"Solid Test Space", suffix:"solidtest.space"}]
+      }
 
-  // properties getter
-  static get properties() {
-    return {
-      foo: { type: String },
-      params: {type: Object},
-      providers: {type: Array},
-      isValidUrl: {type: Boolean}
-    };
-  }
+      firstUpdated() {
+        console.log("PARAMS FirstUpdate", this.params)
+        this.shadowRoot.getElementById("inputSource").value = this.params.source;
+        this.shadowRoot.getElementById("accueilPopup").toggle();
+        try {
+          new URL(this.params.source);
+          this.isValidUrl = true;
+        } catch (_) {
+          this.isValidUrl = false;
+          console.log("TODO recherche de this.params.source parmi this.providers")
+        }
+        console.log("VALID URL :",this.isValidUrl)
 
-  constructor() {
-    // Always call super() first
-    super();
-    this.foo = 'Hello World';
-    this.agentDialog = new DialogAgent("agentDialog", this);
-    console.log(this.agentDialog);
-    this.params = {};
-    this.isValidUrl = false;
-    this.providers = [{name:"solid community", suffix:"solid.community"}, {name:"Inrupt", suffix:"inrupt.net"}, {name:"Solid Test Space", suffix:"solidtest.space"}]
-  }
+      }
+      processParams(params){
+        console.log("PARAMS Process", params)
+        this.params = params
+      }
 
-  firstUpdated() {
-    console.log("PARAMS FirstUpdate", this.params)
-    this.shadowRoot.getElementById("inputSource").value = this.params.source;
-    this.shadowRoot.getElementById("accueilPopup").toggle();
+      explore(){
+        console.log("explore")
+        this.agentDialog.send('agentExplore', {type: 'currentChanged', current: this.shadowRoot.getElementById("inputSource").value });
+      }
 
-
-    try {
-      new URL(this.params.source);
-      this.isValidUrl = true;
-    } catch (_) {
-      this.isValidUrl = false;
-      console.log("TODO recherche de this.params.source parmi this.providers")
     }
-    console.log("VALID URL :",this.isValidUrl)
 
-  }
-  processParams(params){
-    console.log("PARAMS Process", params)
-    this.params = params
-
-  }
-
-  too(){
-    console.log("too")
-    this.shadowRoot.getElementById("accueilPopup").toggle();
-  }
-
-}
-
-// Register the new element with the browser.
-customElements.define('p2m-dialog', P2mDialog);
+    // Register the new element with the browser.
+    customElements.define('p2m-dialog', P2mDialog);

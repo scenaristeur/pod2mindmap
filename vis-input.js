@@ -58,10 +58,10 @@ class VisInput extends LitElement {
 
   firstUpdated() {
     //this.name = this.destinataire+"_Input"
-    this.agentVisinput = new VisinputAgent(this.id, this);
+    this.agentVisinput = new VisinputAgent("agentInput", this);
     console.log(this.agentVisinput);
     this.agentVisinput.send('agentApp', {type: 'dispo', name: 'agentInput' });
-    console.log("DESTINATAIRE2:",this.destinataire);
+  //  console.log("DESTINATAIRE2:",this.destinataire);
 
   }
 
@@ -78,6 +78,10 @@ class VisInput extends LitElement {
   }
 }
 
+currentChanged(current){
+  this.shadowRoot.getElementById('input').value = current;
+}
+
 solidSessionChanged(webId){
   console.log(webId);
   this.shadowRoot.getElementById('input').value = webId;
@@ -87,6 +91,21 @@ traiteMessage(message){
   var retour = {};
   var inputNew = "";
   message=message.trim();
+
+
+  try {
+    new URL(message);
+    this.isValidUrl = true;
+    inputNew = message;
+  } catch (_) {
+    this.isValidUrl = false;
+    console.log("TODO recherche de this.params.source parmi this.providers")
+  }
+  console.log("VALID URL :",this.isValidUrl)
+
+
+if (!this.isValidUrl){
+
   let firstChar = message.charAt(0);
   switch(firstChar){
     case '/':
@@ -199,6 +218,7 @@ traiteMessage(message){
     retour.message = messageCut;
     //        this.agentInput.send('agentSparqlUpdate', {type: "catchTriplet", triplet:messageCut});
   }
+}
 }
 retour.inputNew = inputNew;
 
