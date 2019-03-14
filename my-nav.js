@@ -2,8 +2,9 @@ import { LitElement, html, customElement, property, css } from 'lit-element';
 
 import '@polymer/paper-input/paper-input.js';
 import '@polymer/paper-button/paper-button.js';
-import 'heavy-navbar/dist/heavynavbar.js'
-import './vis-input.js';
+import 'heavy-navbar/dist/heavynavbar.js';
+import 'solid/solid-login.js';
+import './vis-inputtop.js';
 
 export class MyNav extends LitElement {
 
@@ -12,7 +13,7 @@ export class MyNav extends LitElement {
 
 
     <heavy-navbar item-count="5">
-<vis-input  id="agentInput" destinataire="agentVis"></vis-input>
+<!--<vis-input  id="agentInput" destinataire="agentVis"></vis-input>-->
   <!--<div>
     <paper-input always-float-label label="Document Name / POD / location" value="https://smag0.solid.community/public"></paper-input>
     </div>-->
@@ -24,6 +25,7 @@ export class MyNav extends LitElement {
     <a href="#blog" slot="item-3">Blog</a>-->
   <!--  <a href="#contact" slot="item-4">Contact</a>-->
     </heavy-navbar>
+      <solid-login> Solid Login</solid-login>
     `;
   }
 

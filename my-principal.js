@@ -14,6 +14,7 @@ import './my-second.js';
 import './p2m-source.js';
 import './p2m-dialog.js';
 import './solid/solid-explore.js';
+import './solid/solid-ide.js';
 
 class MyPrincipal extends LitElement{
   render(){
@@ -27,6 +28,9 @@ class MyPrincipal extends LitElement{
     <my-element></my-element>
     </div>-->
     <vaadin-split-layout orientation="vertical">
+    <div>
+    <solid-ide></solid-ide>
+    </div>
     <div>Folder</div>
     <div>
     <my-element></my-element>

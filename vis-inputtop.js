@@ -20,7 +20,7 @@ import "./solid/solid-login.js";
 // This is a reusable element. It is not connected to the store. You can
 // imagine that it could just as well be a third-party element that you
 // got from someone else.
-class VisInput extends LitElement {
+class VisInputtop extends LitElement {
   render() {
     return html`
     <style>
@@ -286,4 +286,4 @@ _changePOD(){
 
 }
 
-window.customElements.define('vis-input', VisInput);
+window.customElements.define('vis-inputtop', VisInputtop);

@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "@fooloomanzoo/color-picker": "^3.0.2",
+    "@granite-elements/ace-widget": "^2.2.7-b1",
     "@polymer/iron-selector": "^3.0.1",
     "@polymer/neon-animation": "^3.0.1",
     "@polymer/paper-button": "^3.0.1",

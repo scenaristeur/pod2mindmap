@@ -74,6 +74,7 @@ class SolidExplore extends LitElement {
   currentChanged(current){
     console.log("QUE FAIRE DE ",current)
     this.updateInput(current)
+    this.listeFriends(current)
     this.liste_Folders(current)
     this.get_ttl(current)
   }
