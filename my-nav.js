@@ -3,7 +3,7 @@ import { LitElement, html, customElement, property, css } from 'lit-element';
 import '@polymer/paper-input/paper-input.js';
 import '@polymer/paper-button/paper-button.js';
 import 'heavy-navbar/dist/heavynavbar.js';
-import 'solid/solid-login.js';
+import './solid/solid-login.js';
 import './vis-inputtop.js';
 
 export class MyNav extends LitElement {

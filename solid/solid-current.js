@@ -105,7 +105,7 @@ class SolidCurrent extends LitElement {
 
       }
       app.url = app.current.value.url;
-      app.go()
+    //  app.go()
     })
   }
 

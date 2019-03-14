@@ -9,7 +9,7 @@ import  'rdflib/dist/rdflib.min.js';
 import  'solid-file-client/dist/browser/solid-file-client.bundle.js';
 
 import './my-nav.js';
-import './my-element.js';
+import './my-messages.js';
 import './my-second.js';
 import './p2m-source.js';
 import './p2m-dialog.js';
@@ -29,12 +29,12 @@ class MyPrincipal extends LitElement{
     </div>-->
     <vaadin-split-layout orientation="vertical">
     <div>
+    <my-messages></my-messages>
+    </div>
+    <div>
     <solid-ide></solid-ide>
     </div>
-    <div>Folder</div>
-    <div>
-    <my-element></my-element>
-    </div>
+
     </vaadin-split-layout>
 
     <div style="width: 50%;">

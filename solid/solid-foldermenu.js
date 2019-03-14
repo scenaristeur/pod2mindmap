@@ -15,7 +15,7 @@ import '@polymer/polymer/lib/elements/dom-repeat';
 import '@polymer/paper-item/paper-item.js';
 import  '/node_modules/evejs/dist/eve.custom.js';
 import { FoldermenuAgent } from './agents/FoldermenuAgent.js'
-import { SharedStyles } from 'shared-styles.js';
+import { SharedStyles } from './shared-styles.js';
 import { SolidStyles } from './solid-styles.js';
 import { SolidTools } from "./solid-tools.js"
 
