@@ -40,9 +40,12 @@ FoldermenuAgent.prototype.receive = function(from, message) {
 
 
   switch(message.type){
-    case 'currentChanged':
-    this.app.currentChanged(message.current);
+    case 'folderChanged':
+    this.app.folderChanged(message.folder);
     break;
+    /*case 'currentChanged':
+    this.app.currentChanged(message.current);
+    break;*/
 
 
     default:

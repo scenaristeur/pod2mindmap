@@ -39,6 +39,8 @@ class SolidFoldermenu extends LitElement {
     <table border="1">
     <tr>
     <td>
+
+    <paper-item raised @click="${(e) =>  this.parent()}"> <img src="./assets/folder.png" />${this.folder.parent}</paper-item>
     ${this.folder.folders.map(i => html`
       <paper-item raised @click="${(e) =>  this.get(i)}"> <img src="./assets/folder.png" />${i.name}</paper-item>
       `)}
@@ -103,69 +105,76 @@ class SolidFoldermenu extends LitElement {
         })
       }
 
-      currentChanged(current){
-        console.log(current)
-        this.current= current;
-        if(current.key == "folder"){
-          this.folder = current.value
-          console.log("FOLDER NEW :",this.folder)
-        }
+      folderChanged(folder){
+        console.log("folder changed",folder)
+        this.folder = folder;
       }
-
-      async get(item){
-        //  console.log("GET,", e.model.item)
-        /*console.log(this.public)
-        this.thing.url = this.public;*/
-        var thing = item;
-        console.log(thing)
-        var res = await this.st.get(thing);
-        console.log("RESULT : ",res)
-        if (res.key == "folder"){
-          this.folder = res.value;
-        }else{
-          console.log("traitement d'un fichier")
-          this.current = res;
-        }
-        this.agentFoldermenu.send('agentFileeditor', {type: 'currentChanged', current: res });
-        this.agentFoldermenu.send('agentGraph', {type: 'currentChanged', current: res });
-        this.agentFoldermenu.send('agentCurrent', {type: 'currentChanged', current: res });
-      }
-
-      createFile(){
-        var newFile = this.folder.url+this.shadowRoot.getElementById('nameInput').value;
-        console.log(newFile)
-        this.st.fileclient.createFile( newFile ).then( success => {
-          if(!success){
-            console.log(this.st.fileclient.err)
-            this.log = this.st.fileclient.err
-            this.myBool = true
-          }
-          else {
-            this.log = "Created file "+newFile;
-            console.log( `Created file ${newFile}.`)
-            this.myBool = false
-          }
-        })
-      }
-
-      createFolder(){
-        var url = this.folder.url+this.shadowRoot.getElementById('nameInput').value;
-        console.log(url)
-        this.st.fileclient.createFolder( url ).then( success => {
-          if(!success) {
-            console.log(this.st.fileclient.err)
-            this.log = this.st.fileclient.err
-            this.myBool = true
-          }
-          else {
-            this.log = "Created Folder "+url;
-            console.log( `Created folder ${url}.`)
-            this.myBool = false
-          }
-        })
-      }
-
-
+      /*currentChanged(current){
+      console.log(current)
+      this.current= current;
+      if(current.key == "folder"){
+      this.folder = current.value
+      console.log("FOLDER NEW :",this.folder)
     }
+  }*/
+  parent(){
+    console.log("parent",this.folder.parent)
+    this.agentFoldermenu.send('agentIde', {type: 'folderChanged', folder: this.folder.parent });
+  }
+  get(item){
+    //  console.log("GET,", e.model.item)
+    /*console.log(this.public)
+    this.thing.url = this.public;*/
+    //  var thing = item;
+    console.log(item)
+    /*  var res = await this.st.get(thing);
+    console.log("RESULT : ",res)
+    if (res.key == "folder"){
+    this.folder = res.value;
+  }else{
+  console.log("traitement d'un fichier")
+  this.current = res;
+}*/
+//  this.agentFoldermenu.send('agentFileeditor', {type: 'currentChanged', current: res });
+//  this.agentFoldermenu.send('agentGraph', {type: 'currentChanged', current: res });
+this.agentFoldermenu.send('agentIde', {type: 'folderChanged', folder: item.url });
+}
 
-    window.customElements.define('solid-foldermenu', SolidFoldermenu);
+createFile(){
+  var newFile = this.folder.url+this.shadowRoot.getElementById('nameInput').value;
+  console.log(newFile)
+  this.st.fileclient.createFile( newFile ).then( success => {
+    if(!success){
+      console.log(this.st.fileclient.err)
+      this.log = this.st.fileclient.err
+      this.myBool = true
+    }
+    else {
+      this.log = "Created file "+newFile;
+      console.log( `Created file ${newFile}.`)
+      this.myBool = false
+    }
+  })
+}
+
+createFolder(){
+  var url = this.folder.url+this.shadowRoot.getElementById('nameInput').value;
+  console.log(url)
+  this.st.fileclient.createFolder( url ).then( success => {
+    if(!success) {
+      console.log(this.st.fileclient.err)
+      this.log = this.st.fileclient.err
+      this.myBool = true
+    }
+    else {
+      this.log = "Created Folder "+url;
+      console.log( `Created folder ${url}.`)
+      this.myBool = false
+    }
+  })
+}
+
+
+}
+
+window.customElements.define('solid-foldermenu', SolidFoldermenu);

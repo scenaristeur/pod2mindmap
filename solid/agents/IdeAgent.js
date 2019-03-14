@@ -40,10 +40,12 @@ IdeAgent.prototype.receive = function(from, message) {
 
 
   switch(message.type){
-    case 'currentChanged':
+    /*case 'currentChanged':
     this.app.currentChanged(message.current);
+    break;*/
+    case 'folderChanged':
+    this.app.readFolder(message.folder);
     break;
-
 
 
     default:

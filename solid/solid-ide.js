@@ -38,6 +38,14 @@ class SolidIde extends LitElement {
     </section>
 
     <section>
+    <paper-collapse-item header="FolderMenu" opened>
+
+    <solid-foldermenu current=${this.current}></solid-foldermenu>
+
+    </paper-collapse-item>
+    </section>
+
+    <section>
     <paper-collapse-item header="Graph" opened>
 
     <solid-graph id="spoggy-graph" current=${this.current}></solid-graph>
@@ -45,13 +53,7 @@ class SolidIde extends LitElement {
     </paper-collapse-item>
     </section>
 
-    <section>
-    <paper-collapse-item header="FolderMenu" >
 
-    <solid-foldermenu current=${this.current}></solid-foldermenu>
-
-    </paper-collapse-item>
-    </section>
     <section>
     <paper-collapse-item header="Editor" >
 
@@ -137,54 +139,63 @@ class SolidIde extends LitElement {
         console.log(this._webIdRoot);
         app.current.value.url = this._webIdRoot+"public/";
 
-//PROFILE
-/*
-var person = session.webId
-await app.fetcher.load(person);
-const fullName = app.store.any($rdf.sym(person), this.FOAF('name'));
-console.log(fullName)
-const friends = app.store.each($rdf.sym(person), this.FOAF('knows'));
+        //PROFILE
+        /*
+        var person = session.webId
+        await app.fetcher.load(person);
+        const fullName = app.store.any($rdf.sym(person), this.FOAF('name'));
+        console.log(fullName)
+        const friends = app.store.each($rdf.sym(person), this.FOAF('knows'));
 
- friends.forEach(async (friend) => {
-   await app.fetcher.load(friend);
-   const fullName = app.store.any(friend, FOAF('name'));
-   console.log(fullName && fullName.value || friend.value);
- });*/
-
-
-        this.agentIde.send('agentMessage', {type: 'message', message: "connection :"+session.wedId });
-      }
-      app.url = app.current.value.url;
-      //app.go()
-      console.log(app.context)
-      this.thing.url = this.url;
-      console.log(this.thing)
-      var thing = this.thing;
-      //  this.current = await this.st.get(this.thing);
-      console.log("RESULT : ",this.current)
+        friends.forEach(async (friend) => {
+        await app.fetcher.load(friend);
+        const fullName = app.store.any(friend, FOAF('name'));
+        console.log(fullName && fullName.value || friend.value);
+      });*/
 
 
+      this.agentIde.send('agentMessage', {type: 'message', message: "connection :"+session.wedId });
+    }
+    app.url = app.current.value.url;
+    //app.go()
+    console.log(app.context)
+    this.thing.url = this.url;
+    console.log(this.thing)
+    var thing = this.thing;
+    //  this.current = await this.st.get(this.thing);
+//    console.log("RESULT : ",this.current)
 
-      this.fc.readFolder(this.url).then(folder => {
-        app.folder = folder;
-        console.log("Folder",folder)
-        console.log(`Read ${folder.name}, it has ${folder.files.length} files.`);
-      }, err =>
-      {
-        console.log(err)
-        this.fc.readFile(this.url).then(  body => {
-          console.log(`File content is : ${body}.`);
-        }, err => console.log(err) );
+    this.readFolder(this.url);
+    this.readFile(this.url)
 
-      }
-
- );
+  })
+}
 
 
 
-    })
+readFolder(url){
+  var app = this;
+  this.fc.readFolder(url).then(folder => {
+    app.folder = folder;
+    console.log("Folder",folder)
+    console.log(`Read ${folder.name}, it has ${folder.files.length} files.`);
+    app.agentIde.send('agentFoldermenu', {type: 'folderChanged', folder: folder });
+    this.agentIde.send('agentMessage', {type: 'message', message: "folder name  :"+folder.name });
+  }, err =>
+  {
+    console.log(err)
   }
 
+);
+}
+
+readFile(url){
+  var app = this;
+  this.fc.readFile(url).then(  body => {
+    app.fileContent = body
+    console.log(`File content is : ${body}.`);
+  }, err => console.log(err) );
+}
 
 
 }
