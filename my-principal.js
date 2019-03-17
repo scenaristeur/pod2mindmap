@@ -21,27 +21,16 @@ class MyPrincipal extends LitElement{
     return html`
     <my-nav></my-nav>
     <vaadin-split-layout style="height: 100%;">
-    <!--<div style="width: 25%;min-width: 3%; max-width: 97%;">
-    FOLDER<my-element></my-element>
-    </div>
-    <div style="width: 25%;min-width: 3%; max-width: 97%;">
-    <my-element></my-element>
-    </div>-->
     <vaadin-split-layout orientation="vertical">
-    <div>
-    <my-messages></my-messages>
-    </div>
     <div>
     <solid-ide></solid-ide>
     </div>
-
     </vaadin-split-layout>
-
     <div style="width: 50%;">
     <my-second>Chargement du Graphe</my-second>
+        <my-messages></my-messages>
     </div>
     </vaadin-split-layout>
-
     <p2m-source></p2m-source>
     <p2m-dialog></p2m-dialog>
     <solid-explore></solid-explore>

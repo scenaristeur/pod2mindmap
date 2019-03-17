@@ -1,44 +1,32 @@
 import { LitElement, html, customElement, property, css } from 'lit-element';
+import '/node_modules/web-animations-js/web-animations-next.min.js';
+import '@polymer/paper-icon-button/paper-icon-button.js';
+import '@polymer/paper-item/paper-item.js';
+import '@polymer/paper-listbox/paper-listbox.js';
+import '@polymer/paper-menu-button/paper-menu-button.js';
 
-import '@polymer/paper-input/paper-input.js';
-import '@polymer/paper-button/paper-button.js';
-import 'heavy-navbar/dist/heavynavbar.js';
 import './solid/solid-login.js';
-import './vis-inputtop.js';
+//import './vis-inputtop.js';
 
 export class MyNav extends LitElement {
 
   render() {
     return html`
+    <paper-menu-button>
+    <paper-icon-button icon="menu" slot="dropdown-trigger"></paper-icon-button>
+    <!--  <paper-button slot="dropdown-trigger" raised>
 
-
-    <heavy-navbar item-count="5">
-<!--<vis-input  id="agentInput" destinataire="agentVis"></vis-input>-->
-  <!--<div>
-    <paper-input always-float-label label="Document Name / POD / location" value="https://smag0.solid.community/public"></paper-input>
-    </div>-->
-<!--    <paper-button raised>File</paper-button>
-    <paper-button raised>Mindmap</paper-button>
-      <paper-button raised>Connect</paper-button>
-    <a href="#" slot="item-1">Home</a>
-    <a href="#about" slot="item-2">POD</a>
-    <a href="#blog" slot="item-3">Blog</a>-->
-  <!--  <a href="#contact" slot="item-4">Contact</a>-->
-    </heavy-navbar>
-      <solid-login> Solid Login</solid-login>
+    <span slot="dropdown-trigger">File</span>
+    </paper-button>-->
+    <paper-listbox slot="dropdown-content">
+    <paper-item>New (/n)</paper-item>
+    <paper-item>Import (/i)</paper-item>
+    <paper-item>Export (/e or /t for turtle Export)</paper-item>
+    <paper-item>Help (/h)</paper-item>
+    </paper-listbox>
+    </paper-menu-button>
+    <solid-login>Solid Login</solid-login>
     `;
-  }
-
-  static get styles() {
-    return [
-      css`
-      :host {
-        display: block;
-        --heavy-navbar-background: #ffffff;
-        --heavy-navbar-color: #000000;
-        --heavy-navbar-hover-color: #333333;
-      }`
-    ]
   }
 
 }

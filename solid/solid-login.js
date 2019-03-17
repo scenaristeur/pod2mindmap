@@ -17,23 +17,17 @@ import '@polymer/paper-button/paper-button.js';
 class SolidLogin extends LitElement {
   render() {
     return html`
-    <p ?hidden=${this.connected}>
-    Pour pouvoir utiliser Solid, vous devez dans un premier temps vous connecter à votre POD.</br>
-    To use Solid, you must first login to your POD.<br>
-    (<a href="https://solid.inrupt.com/get-a-solid-pod" target="_blank"> Get a POD / Obtenir un POD</a>)
-    </p>
-
     <paper-button
     id="loginBtn"
     ?hidden=${this.connected}
     @click="${this._popupLogin}"
-    raised>Login / Connection</paper-button>
-
+    raised>Podin</paper-button>
+    <a ?hidden=${this.connected} href="https://solid.inrupt.com/get-a-solid-pod" target="_blank">What is a POD ?</a>
     <paper-button
     id="logoutBtn"
     ?hidden=${!this.connected}
     @click="${this._logout}"
-    raised>Logout / Deconnexion</paper-button>
+    raised>Podout</paper-button>
     `;
   }
 
@@ -45,10 +39,10 @@ class SolidLogin extends LitElement {
     super();
     this.connected = false;
   }
-  connectedCallback(){
-    super.connectedCallback();
-    /*console.log(solid)
-    console.log($rdf)
+  firstUpdated(){
+  //  super.connectedCallback();
+    //console.log(solid)
+    //console.log($rdf)
     //this.status = "inconnu"
 
     solid.auth.trackSession(session => {
@@ -60,21 +54,21 @@ class SolidLogin extends LitElement {
         console.log(`The user is ${session.webId}`)
         this.connected = true
       }
-    })*/
+    })
   }
 
   async _popupLogin() {
     let session = await solid.auth.currentSession();
-  //  let popupUri = 'https://solid.community/common/popup.html';
-    let popupUri = '/node_modules/solid-auth-client/dist-popup/popup.html';
+    let popupUri = 'https://solid.community/common/popup.html';
+    //  let popupUri = '/node_modules/solid-auth-client/dist-popup/popup.html';
     if (!session)
     session = await solid.auth.popupLogin({ popupUri });
-  //  alert(`Logged in as ${session.webId}`);
+    alert(`Logged in as ${session.webId}`);
   }
 
   _logout(){
     solid.auth.logout()
-  //  .then(() => alert('Goodbye!'));
+    .then(() => alert('Goodbye!'));
   }
 
 }

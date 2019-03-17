@@ -90,8 +90,8 @@ class SolidIde extends LitElement {
     this.RDFS = $rdf .Namespace('http://www.w3.org/2000/01/rdf-schema#');
     this.OWL = $rdf .Namespace('http://www.w3.org/2002/07/owl#');*/
   }
-  connectedCallback(){
-    super.connectedCallback();
+  firstUpdated(){
+    //super.connectedCallback();
     var app = this;
     this.agentIde = new IdeAgent("agentIde", this);
 
@@ -157,8 +157,8 @@ class SolidIde extends LitElement {
     //  this.current = await this.st.get(this.thing);
     //    console.log("RESULT : ",this.current)
 
-    this.readFolder(this.url);
-    this.readFile(this.url)
+  //  this.readFolder(this.url);
+  //  this.readFile(this.url)
 
   })
 }
