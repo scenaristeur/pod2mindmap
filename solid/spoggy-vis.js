@@ -537,6 +537,78 @@ decortiqueFile(fichier, remplaceNetwork){
   decortiqueFile(fichier, remplaceNetwork, this.network)
 }
 
+catchTriplet(tripletString){
+
+    // console.log(message.length);
+     //message=message.trim();
+     //var tripletString = message.substring(2).trim().split(" ");
+     // les noeuds existent-ils ?
+     var sujetNode = this.network.body.data.nodes.get({
+       filter: function(node){
+         //    console.log(node);
+         return (node.label == tripletString[0] );
+       }
+     });
+     var objetNode = this.network.body.data.nodes.get({
+       filter: function(node){
+         //    console.log(node);
+         return (node.label == tripletString[2]);
+       }
+     });
+     console.log(sujetNode);
+     console.log(objetNode);
+     // sinon, on les créé
+     if (sujetNode.length == 0){
+       this.network.body.data.nodes.add({label: tripletString[0] });
+     }
+     if (objetNode.length == 0){
+       this.network.body.data.nodes.add({ label: tripletString[2] });
+     }
+     // maintenant ils doivent exister, pas très po=ropre comme méthode , à revoir
+     sujetNode = this.network.body.data.nodes.get({
+       filter: function(node){
+         console.log(node);
+         return (node.label == tripletString[0] );
+       }
+     });
+     objetNode = this.network.body.data.nodes.get({
+       filter: function(node){
+         console.log(node);
+         return (node.label == tripletString[2]);
+       }
+     });
+    /* var actionSujet = {};
+     actionSujet.type = "newNode";
+     actionSujet.data = sujetNode[0];
+     //  actionsToSendTemp.push(actionSujet);
+     this.addAction(actionSujet);
+     var actionObjet = {};
+     actionObjet.type = "newNode";
+     actionObjet.data = objetNode[0];
+     //  actionsToSendTemp.push(actionObjet);
+     this.addAction(actionObjet);*/
+     // maintenant, on peut ajouter l'edge
+     this.network.body.data.edges.add({
+       label: tripletString[1],
+       from : sujetNode[0].id,
+       to : objetNode[0].id
+     });
+     //on récupère ce edge pour l'envoyer au serveur
+     var edge = this.network.body.data.edges.get({
+       filter: function(edge) {
+         return (edge.from == sujetNode[0].id && edge.to == objetNode[0].id && edge.label == tripletString[1]);
+       }
+     });
+     console.log("OK")
+     /*var actionEdge = {};
+     actionEdge.type = "newEdge";
+     actionEdge.data = edge;
+     this.addAction(actionEdge);*/
+     //  actionsToSendTemp.push(actionEdge);
+     //console.log(actionsToSendTemp);
+     //  return actionsToSendTemp;
+   }
+
 
 /*  updated(changedProperties){
 super.updated(changedProperties)

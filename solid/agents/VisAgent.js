@@ -41,9 +41,7 @@ VisAgent.prototype.receive = function(from, message) {
 
   switch(message.type){
     case 'catchTriplet':
-    let triplet = message.triplet;
-    console.log(triplet)
-    this.app.tripletToNetwork(triplet);
+    this.app.catchTriplet(message.triplet);
     break;
     case 'contentChanged':
     this.app.contentChanged();

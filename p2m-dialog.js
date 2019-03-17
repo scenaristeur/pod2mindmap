@@ -326,7 +326,7 @@ class P2mDialog extends LitElement {
       firstUpdated() {
         console.log("PARAMS FirstUpdate", this.params)
         this.shadowRoot.getElementById("inputSource").value = this.params.source;
-      //  this.shadowRoot.getElementById("accueilPopup").toggle();
+      // this.shadowRoot.getElementById("accueilPopup").toggle();
         try {
           new URL(this.params.source);
           this.isValidUrl = true;

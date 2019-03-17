@@ -1,23 +1,20 @@
 // Use relative paths for peer dependencies
-import {
-  LitElement, html, customElement, property
-} from 'lit-element';
-
-import '@vaadin/vaadin-split-layout/vaadin-split-layout.js';
-import  'solid-auth-client/dist-lib/solid-auth-client.bundle.js';
-import  'rdflib/dist/rdflib.min.js';
-import  'solid-file-client/dist/browser/solid-file-client.bundle.js';
-
+import { LitElement, html, customElement, property } from "./node_modules/lit-element/lit-element.js";
+import "./node_modules/@vaadin/vaadin-split-layout/vaadin-split-layout.js";
+import "./node_modules/solid-auth-client/dist-lib/solid-auth-client.bundle.js";
+import "./node_modules/rdflib/dist/rdflib.min.js";
+import "./node_modules/solid-file-client/dist/browser/solid-file-client.bundle.js";
 import './my-nav.js';
 import './my-messages.js';
 import './my-second.js';
 /*import './p2m-source.js';
 import './p2m-dialog.js';
 import './solid/solid-explore.js';*/
+
 import './solid/solid-ide.js';
 
-class MyPrincipal extends LitElement{
-  render(){
+class MyPrincipal extends LitElement {
+  render() {
     return html`
     <my-nav></my-nav>
     <vaadin-split-layout style="height: 100%;">
@@ -37,5 +34,7 @@ class MyPrincipal extends LitElement{
     <solid-explore></solid-explore>-->
     `;
   }
+
 }
+
 customElements.define('my-principal', MyPrincipal);
