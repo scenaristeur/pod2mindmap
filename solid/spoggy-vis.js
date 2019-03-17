@@ -368,7 +368,7 @@ addResultsToGraph(network, results){
 
 addNodeIfNotExist(network, data){
   var existNode = false;
-  console.log("addNodeIfNotExist",data);
+//  console.log("addNodeIfNotExist",data);
   var nodeId;
   try{
     existNode = network.body.data.nodes.get({
@@ -491,17 +491,17 @@ app.updateGraph(data)
 }
 
 localname(node){
-  console.log("LOCALNAME OF ",node)
+//  console.log("LOCALNAME OF ",node)
   if (node.value != undefined){
     var value = node.value;
-    console.log(value)
+  //  console.log(value)
     if (value.endsWith('/') || value.endsWith('#')){
       value = value.substring(0,value.length-1);
     }
     var labelU = value;
 
     if (node.termType == "NamedNode"){
-      console.log("namenode")
+    //  console.log("namenode")
       var uLabel = value.split("#");
       var labelU = uLabel[uLabel.length-1];
       if (labelU == uLabel){
@@ -511,7 +511,7 @@ localname(node){
     }else{
       console.log("literal or blanknode ???")
     }
-    console.log(labelU)
+  //  console.log(labelU)
     return labelU;
   }else{
     console.log("TODO node.value = undefined, il faut maintenant traiter le tableau",node.elements)

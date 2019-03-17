@@ -49,7 +49,7 @@ class SolidCurrent extends LitElement {
 //    console.log(this.agentCurrent);
 }
 
-async go(){
+go(){
   this.current = this.shadowRoot.getElementById("currentInput").value;
   this.agentCurrent.send('agentFoldermenu', {type: 'currentChanged', current: this.current });
   this.agentCurrent.send('agentFileeditor', {type: 'currentChanged', current: this.current });

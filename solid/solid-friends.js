@@ -13,8 +13,9 @@ import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-input/paper-input.js';
 import  '/node_modules/evejs/dist/eve.custom.js';
 import { FriendsAgent } from './agents/FriendsAgent.js'
-//import  '/node_modules/solid-file-client/solid-file-client.js';
-import { SolidTools } from "./solid-tools.js"
+
+import { SharedStyles } from './shared-styles.js';
+import { SolidStyles } from './solid-styles.js';
 
 // This is a reusable element. It is not connected to the store. You can
 // imagine that it could just as well be a third-party element that you
@@ -22,46 +23,42 @@ import { SolidTools } from "./solid-tools.js"
 class SolidFriends extends LitElement {
   render() {
     return html`
-    <paper-input id="currentInput" label="Current Folder / Dossier Courant" value="${this.current.value.url}"></paper-input>
-    <paper-button id="goBtn" raised   @click="${this.go}">Go</paper-button>
-    `;
-  }
-
-  static get properties() {
-    return {
-      current: {type: Object},
+    ${SharedStyles}
+    ${SolidStyles}
+    <paper-collapse-item header="Friends ${this.friends.length}" opened>
+    ${this.friends.map(i => html`
+      <paper-item raised @click="${(e) =>  this.get(i)}"> <img src="./assets/folder.png" />${i.name}</paper-item>
+      `)}
+        </paper-collapse-item>
+      `;
     }
+
+    static get properties() {
+      return {
+        friends: Array
+      }
+    }
+
+    constructor(){
+      super();
+
+      this.friends = [{name:"bob"}, {name:"emmer"}]
+    }
+
+    get(item){
+      console.log(item)
+    }
+
+    connectedCallback(){
+      super.connectedCallback();
+      var app = this;
+      //console.log( 'id : ', this.id);
+      this.agentFriends = new FriendsAgent("agentFriends", this);
+      console.log(this.agentFriends);
+    }
+
+
+
   }
 
-  constructor(){
-    super();
-    this.current = {}
-    this.current.value = {};
-    this.current.value.url = "https://smag0.solid.community/public/";
-    this.current.key = "folder"
-  }
-
-  connectedCallback(){
-    super.connectedCallback();
-    var app = this;
-    //console.log( 'id : ', this.id);
-    this.agentFriends = new FriendsAgent("agentFriends", this);
-//    console.log(this.agentCurrent);
-}
-
-async go(){
-  this.current = this.shadowRoot.getElementById("currentInput").value;
-  this.agentFriends.send('agentFoldermenu', {type: 'currentChanged', current: this.current });
-  this.agentFriends.send('agentFileeditor', {type: 'currentChanged', current: this.current });
-  this.agentFriends.send('agentGraph', {type: 'currentChanged', current: this.current });
-
-}
-
-currentChanged(current){
-  console.log(current)
-  this.current = current;
-}
-
-}
-
-window.customElements.define('solid-firends', SolidFriends);
+  window.customElements.define('solid-friends', SolidFriends);

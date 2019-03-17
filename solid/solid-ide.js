@@ -28,38 +28,17 @@ class SolidIde extends LitElement {
   render() {
     return html`
     ${SharedStyles}
-
-
-    <section>
     <paper-collapse-item header="Current" opened>
-
     <solid-current current=${this.current}></solid-current>
-
     </paper-collapse-item>
-    </section>
-
-    <section>
     <paper-collapse-item header="FolderMenu" opened>
-
     <solid-foldermenu current=${this.current}></solid-foldermenu>
-
     </paper-collapse-item>
-    </section>
-
-
-
-
-    <section>
     <paper-collapse-item header="Editor" opened>
-
     <solid-fileeditor current=${this.current}></solid-fileeditor>
-
     </paper-collapse-item>
-    </section>
     <!--  <solid-filemanager current={{current}}></solid-filemanager>
     <solid-foldermanager current={{current}}></solid-foldermanager>-->
-
-
     `;
   }
 
@@ -157,8 +136,8 @@ class SolidIde extends LitElement {
     //  this.current = await this.st.get(this.thing);
     //    console.log("RESULT : ",this.current)
 
-  //  this.readFolder(this.url);
-  //  this.readFile(this.url)
+    this.readFolder(this.url);
+    this.readFile(this.url)
 
   })
 }

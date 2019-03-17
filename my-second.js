@@ -31,22 +31,10 @@ class MySecond extends LitElement {
     */
     return html`
         ${SharedStyles}
-
-        <section>
-        <paper-collapse-item header="Friends" opened>
-
-        <solid-friends id="spoggy-graph" current=${this.current}></solid-friends>
-
-        </paper-collapse-item>
-        </section>
-        <section>
+        <solid-friends>charge friends</solid-friends>
         <paper-collapse-item header="Graph" opened>
-
-        <solid-graph id="spoggy-graph" current=${this.current}></solid-graph>
-
+        <solid-graph id="spoggy-graph"></solid-graph>
         </paper-collapse-item>
-        </section>
-
     `;
   }
 

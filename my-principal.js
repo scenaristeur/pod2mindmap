@@ -16,6 +16,7 @@ import './p2m-dialog.js';
 import './solid/solid-explore.js';*/
 import './solid/solid-ide.js';
 
+
 class MyPrincipal extends LitElement{
   render(){
     return html`
