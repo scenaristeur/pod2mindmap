@@ -3,7 +3,10 @@
 * and TypeScript decorators
 **/
 import {  LitElement, html,} from 'lit-element';
-import './my-graph.js';
+//import './my-graph.js';
+import 'paper-collapse-item/paper-collapse-item.js';
+import { SharedStyles } from './solid/shared-styles.js';
+import "./solid/solid-graph.js";
 
 
 /**
@@ -26,7 +29,15 @@ class MySecond extends LitElement {
     * the element template.
     */
     return html`
-    <my-graph></my-graph>
+        ${SharedStyles}
+        <section>
+        <paper-collapse-item header="Graph" opened>
+
+        <solid-graph id="spoggy-graph" current=${this.current}></solid-graph>
+
+        </paper-collapse-item>
+        </section>
+  GRAPHE<!--  <my-graph></my-graph>-->
     `;
   }
 

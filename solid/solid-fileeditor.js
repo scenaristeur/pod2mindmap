@@ -12,8 +12,9 @@ import { LitElement, html } from 'lit-element';
 import '@polymer/paper-button/paper-button.js';
 import  '/node_modules/evejs/dist/eve.custom.js';
 import { FileeditorAgent } from './agents/FileeditorAgent.js'
-import { SharedStyles } from 'shared-styles.js';
+import { SharedStyles } from './shared-styles.js';
 import { SolidStyles } from './solid-styles.js';
+import  '/node_modules/ace-builds/src-noconflict/ace.js';
 import '/node_modules/@granite-elements/ace-widget/ace-widget.js';
 //import  '/node_modules/solid-file-client/solid-file-client.js';
 import { SolidTools } from "./solid-tools.js"
@@ -35,10 +36,7 @@ class SolidFileditor extends LitElement {
     </style>
 
     <div class="card">
-    <div>
-    Current : ${this.current.value.url}   <a href="${this.current.value.url}" target="_blank"><img src="./assets/folder.png"></a>
-    </div>
-    <ace-widget
+      <ace-widget
     id="acetwo"
     theme="ace/theme/monokai"
     mode="ace/mode/turtle"
@@ -55,22 +53,24 @@ class SolidFileditor extends LitElement {
 
   static get properties() {
     return {
-      current: {type: Object,  observer: "currentChanged"},
-      contenu: {type: String, value: "contenu de l'éditeur"},
+      current: {type: Object},
+      contenu: {type: String},
       file: {type: Object},
       myBool: { type: Boolean },
-      log: {type: String}
+      log: {type: String},
+      ace: {type: Object}
     }
   }
 
   connectedCallback(){
     super.connectedCallback();
+    this.current = {};
     this.current.value={}
-    this.file = {},
+    this.file = {};
     this.file.url = "";
     this.myBool = true;
     this.log = ""
-    //  console.log("ACE ",ace)
+     console.log("ACE ",ace)
     /*  var div = document.createElement('div');
     div.id="blop"
     var shadowRoot = div.attachShadow({mode: 'open'});
@@ -78,9 +78,9 @@ class SolidFileditor extends LitElement {
     this.$.editor.appendChild(div)*/
     this.agentFileeditor = new FileeditorAgent("agentFileeditor", this);
     console.log(this.agentFileeditor);
-    this.st = new SolidTools();
-    this.st.fileclient = SolidFileClient;
-    console.log("FILE CLIENT ", this.fileclient )
+    //this.st = new SolidTools();
+    //this.st.fileclient = SolidFileClient;
+    //console.log("FILE CLIENT ", this.fileclient )
 
   }
 
@@ -97,6 +97,11 @@ class SolidFileditor extends LitElement {
       console.log('folder')
       this.shadowRoot.getElementById('acetwo').editorValue = this.file.content;
     }
+  }
+
+  contentChanged(content){
+  //  console.log("content changed", content)
+    this.shadowRoot.getElementById('acetwo').editorValue = content;
   }
 
   save(){

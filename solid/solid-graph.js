@@ -16,6 +16,7 @@ import { GraphAgent } from './agents/GraphAgent.js'
 //import  '/node_modules/solid-file-client/solid-file-client.js';
 import { SolidTools } from "./solid-tools.js"
 import './spoggy-vis.js'
+//import './my-graph.js'
 
 // This is a reusable element. It is not connected to the store. You can
 // imagine that it could just as well be a third-party element that you
@@ -26,6 +27,7 @@ class SolidGraph extends LitElement {
     <!--PB si on supprime la ligne suivante mais pourquoi ? SUR LIGNE SUIVANTE  : attributeValue is null -->
     <paper-input hidden id="currentInput" label="Current Folder / Dossier Courant" value="${this.current.value.url}"></paper-input>
     <spoggy-vis id="spoggy-vis" current=${this.current} data=${this.data}></spoggy-vis>
+  <!--  <my-graph></my-graph> -->
     `;
   }
 
@@ -33,13 +35,19 @@ class SolidGraph extends LitElement {
     return {
       store: Object,
       fetcher: Object,
-      context: {type: Object, value: {}},
+      context: Object,
       webId: Object,
-      public: {type: String, notify: true},
-      current: {type: Object},
-      thing: {type: Object, value: {}},
-      data: {type: Object, value: {}}
+    //  public: String,
+      current: Object,
+    //  thing: Object,
+      data: {type: Object}
     }
+  }
+
+  constructor() {
+    super();
+
+    this.current = {value: {url: ""}};
   }
 
   connectedCallback(){
@@ -66,38 +74,7 @@ class SolidGraph extends LitElement {
     this.RDFS = $rdf .Namespace('http://www.w3.org/2000/01/rdf-schema#');
     this.OWL = $rdf .Namespace('http://www.w3.org/2002/07/owl#');
 
-    solid.auth.trackSession(session => {
-      if (!session){
-        console.log('The user is not logged in')
-        /*  app.context = null;
-        //app.$.podInput.value = ""
-        app.current = {}
-        app.public = "https://smag0.solid.community/public/"
-        app.thing = {}*/
-      }
-      else{
-        console.log(`The user is ${session.webId}`)
-        /*  app.context = {}
-        app.context.wedId = session.webId;
 
-        app.context.me = $rdf.sym(session.webId)
-        app.store = $rdf.graph() // Make a Quad store
-        app.fetcher = $rdf.fetcher(app.store) // Attach a web I/O module, store.fetcher
-        app.store.updater = new $rdf.UpdateManager(app.store) // Add real-time live updates store.updater
-        app.context.profileDocument = app.context.me.doc()
-        console.log(app.context.me)
-        console.log(app.fetcher)
-        console.log(app.store)
-        console.log("PROFILEDOC ",app.context.profileDocument)
-        var wedIdSpilt = session.webId.split("/");
-        this._webIdRoot = wedIdSpilt[0]+"//"+wedIdSpilt[2]+"/";
-        console.log(this._webIdRoot);
-        app.public = this._webIdRoot+"public/";*/
-
-        //  this.loadProfileDocument();
-      }
-
-    })
   }
 
   currentChanged(current){
@@ -112,6 +89,11 @@ class SolidGraph extends LitElement {
       console.log("Current.key inconnu",current.key)
     }
   }
+
+
+
+
+
 
   async nodeChanged(node){
     var thing = {};

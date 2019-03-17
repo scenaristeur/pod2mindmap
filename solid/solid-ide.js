@@ -7,8 +7,9 @@ import "./solid-current.js";
 import "./solid-foldermenu.js";
 import "./solid-filemanager.js";
 //import "./solid-foldermanager.js";
-// PB ACE.JS import "./solid-fileeditor.js";
-import "./solid-graph.js";
+// PB ACE.JS
+import "./solid-fileeditor.js";
+
 import 'paper-collapse-item/paper-collapse-item.js';
 import { SharedStyles } from './shared-styles.js';
 
@@ -45,19 +46,13 @@ class SolidIde extends LitElement {
     </paper-collapse-item>
     </section>
 
-    <section>
-    <paper-collapse-item header="Graph" opened>
 
-    <solid-graph id="spoggy-graph" current=${this.current}></solid-graph>
-
-    </paper-collapse-item>
-    </section>
 
 
     <section>
-    <paper-collapse-item header="Editor" >
+    <paper-collapse-item header="Editor" opened>
 
-    <!--  <solid-fileeditor current=${this.current}></solid-fileeditor>-->
+    <solid-fileeditor current=${this.current}></solid-fileeditor>
 
     </paper-collapse-item>
     </section>
@@ -99,12 +94,9 @@ class SolidIde extends LitElement {
     super.connectedCallback();
     var app = this;
     this.agentIde = new IdeAgent("agentIde", this);
-    console.log(this.agentIde);
+
     this.fc = SolidFileClient;
-    console.log(this.fc)
-    console.log(solid)
-    console.log($rdf)
-    //this.status = "inconnu"
+
 
     solid.auth.trackSession(session => {
       if (!session){
@@ -163,7 +155,7 @@ class SolidIde extends LitElement {
     console.log(this.thing)
     var thing = this.thing;
     //  this.current = await this.st.get(this.thing);
-//    console.log("RESULT : ",this.current)
+    //    console.log("RESULT : ",this.current)
 
     this.readFolder(this.url);
     this.readFile(this.url)
@@ -191,9 +183,16 @@ readFolder(url){
 
 readFile(url){
   var app = this;
+  var file= {};
+  file.value = {};
+  file.value.url = url;
+  file.key = "file";
+  this.agentIde.send('agentGraph', {type: 'currentChanged', current: file });
   this.fc.readFile(url).then(  body => {
     app.fileContent = body
-    console.log(`File content is : ${body}.`);
+  //  console.log(`File content is : ${body}.`);
+    this.agentIde.send('agentFileeditor', {type: 'contentChanged', content: body });
+
   }, err => console.log(err) );
 }
 

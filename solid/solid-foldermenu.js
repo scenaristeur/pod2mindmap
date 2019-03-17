@@ -94,15 +94,7 @@ class SolidFoldermenu extends LitElement {
         this.folder.files = []
         //  this.log = "";
 
-        solid.auth.trackSession(session => {
-          if (!session){
-            console.log('The user is not logged in')
-            //app.context = null;
-          }
-          else{
-            console.log(`The user is ${session.webId}`)
-          }
-        })
+
       }
 
       folderChanged(folder){
@@ -137,7 +129,12 @@ class SolidFoldermenu extends LitElement {
 }*/
 //  this.agentFoldermenu.send('agentFileeditor', {type: 'currentChanged', current: res });
 //  this.agentFoldermenu.send('agentGraph', {type: 'currentChanged', current: res });
-this.agentFoldermenu.send('agentIde', {type: 'folderChanged', folder: item.url });
+if (item.type == "folder"){
+  this.agentFoldermenu.send('agentIde', {type: 'folderChanged', folder: item.url });
+}else{
+  this.agentFoldermenu.send('agentIde', {type: 'fileChanged', file: item.url });
+}
+
 }
 
 createFile(){

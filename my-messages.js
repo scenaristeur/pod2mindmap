@@ -48,7 +48,7 @@ class MyMessages extends LitElement {
     var app = this;
     //console.log( 'id : ', this.id);
     this.agentMessage = new MessageAgent("agentMessage", this);
-    console.log(this.agentMessage);
+  //  console.log(this.agentMessage);
 
   }
 

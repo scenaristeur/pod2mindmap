@@ -28,35 +28,40 @@ class SolidFilemanager extends LitElement {
 
   static get properties() {
     return {
-      store: Object,
-      fetcher: Object,
-      context: {type: Object, value: {}},
-      webId: Object,
-      public: {type: String, notify: true},
-      current: {type: Object, notify: true},
-      thing: {type: Object, value: {}}
+    //  store: Object,
+    //  fetcher: Object,
+    //  context: {type: Object},
+    //  webId: Object,
+      public:  String,
+    //  current: {type: Object},
+    //  thing: {type: Object}
     }
   }
 
+  constructor(){
+    super();
+    this.public = ""
+
+  }
   connectedCallback(){
     super.connectedCallback();
-    var app = this;
+  //  var app = this;
 
-    console.log(solid)
-    console.log($rdf)
-    app.thing={}
+  //  console.log(solid)
+  //  console.log($rdf)
+  //  app.thing={}
     //  this.fileclient = SolidFileClient;
-    this.st = new SolidTools();
-    this.st.fileclient = SolidFileClient;
-    console.log("FILE CLIENT ", this.fileclient )
+    //this.st = new SolidTools();
+    //this.st.fileclient = SolidFileClient;
+  //  console.log("FILE CLIENT ", this.fileclient )
     // NAMESPACES : https://github.com/solid/solid-namespace/blob/master/index.js
-    this.VCARD = $rdf.Namespace('http://www.w3.org/2006/vcard/ns#');
+    /*this.VCARD = $rdf.Namespace('http://www.w3.org/2006/vcard/ns#');
     this.SPACE = $rdf.Namespace('http://www.w3.org/ns/pim/space#');
     this.SOLID = $rdf.Namespace('http://www.w3.org/ns/solid/terms#');
     this.LDP = $rdf.Namespace('http://www.w3.org/ns/ldp#');
     this.RDFS = $rdf .Namespace('http://www.w3.org/2000/01/rdf-schema#');
-    this.OWL = $rdf .Namespace('http://www.w3.org/2002/07/owl#');
-
+    this.OWL = $rdf .Namespace('http://www.w3.org/2002/07/owl#');*/
+/*
     solid.auth.trackSession(session => {
       if (!session){
         console.log('The user is not logged in')
@@ -88,15 +93,15 @@ class SolidFilemanager extends LitElement {
         //  this.loadProfileDocument();
       }
 
-    })
+    })*/
   }
 
   async go(){
     console.log(this.public)
-    this.thing.url = this.public;
+  /*  this.thing.url = this.public;
     var thing = this.thing;
     this.current = await this.st.get(thing);
-    console.log("RESULT : ",this.current)
+    console.log("RESULT : ",this.current)*/
   }
 
 

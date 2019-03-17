@@ -40,8 +40,9 @@ FileeditorAgent.prototype.receive = function(from, message) {
 
 
   switch(message.type){
-    case 'currentChanged':
-    this.app.currentChanged(message.current);
+    case 'contentChanged':
+  //  console.log(message)
+    this.app.contentChanged(message.content);
     break;
 
 

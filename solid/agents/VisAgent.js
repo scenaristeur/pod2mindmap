@@ -45,6 +45,9 @@ VisAgent.prototype.receive = function(from, message) {
     console.log(triplet)
     this.app.tripletToNetwork(triplet);
     break;
+    case 'contentChanged':
+    this.app.contentChanged();
+    break;
     case 'clear':
     this.app.clear();
     break;
@@ -115,8 +118,8 @@ VisAgent.prototype.receive = function(from, message) {
     case 'fileChanged':
     console.log('fileChanged', message)
     this.app.fileChanged(message.file)
-
     break;
+    case 'contentChanged':
     case 'savenode':
     console.log("savenode", message.data);
     this.app.savenode(message.data);

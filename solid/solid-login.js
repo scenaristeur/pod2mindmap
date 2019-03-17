@@ -47,7 +47,7 @@ class SolidLogin extends LitElement {
   }
   connectedCallback(){
     super.connectedCallback();
-    console.log(solid)
+    /*console.log(solid)
     console.log($rdf)
     //this.status = "inconnu"
 
@@ -60,7 +60,7 @@ class SolidLogin extends LitElement {
         console.log(`The user is ${session.webId}`)
         this.connected = true
       }
-    })
+    })*/
   }
 
   async _popupLogin() {

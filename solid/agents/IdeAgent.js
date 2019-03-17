@@ -46,6 +46,9 @@ IdeAgent.prototype.receive = function(from, message) {
     case 'folderChanged':
     this.app.readFolder(message.folder);
     break;
+    case 'fileChanged':
+    this.app.readFile(message.file);
+    break;
 
 
     default:

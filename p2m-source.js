@@ -44,7 +44,7 @@ Source
     super();
     this.foo = 'Hello World';
     this.agentSource = new SourceAgent("agentSource", this);
-    console.log(this.agentSource);
+  //  console.log(this.agentSource);
 
   }
 

@@ -1,10 +1,7 @@
-/**
-* Import LitElement base class, html helper function,
-* and TypeScript decorators
-**/
-import {  LitElement, html,} from 'lit-element';
-import 'vis/dist/vis.js';
+
+import {LitElement, html} from 'lit-element';
 import  '/node_modules/evejs/dist/eve.custom.js';
+import 'vis/dist/vis.js';
 import { VisAgent } from './agents/VisAgent.js'
 import { GraphStyles } from './graph-styles.js';
 import './vis-input.js';
@@ -12,25 +9,10 @@ import './vis-popup.js';
 import './import-export.js';
 
 
-/**
-* Use the customElement decorator to define your class as
-* a custom element. Registers <my-element> as an HTML tag.
-*/
 
 class SpoggyVis extends LitElement {
 
-  /**
-  * Create an observed property. Triggers update on change.
-  */
-
-  /**
-  * Implement `render` to define a template for your element.
-  */
-  render(){
-    /**
-    * Use JavaScript expressions to include property values in
-    * the element template.
-    */
+  render() {
     return html`
     ${GraphStyles}
     <link rel="stylesheet" href="node_modules/vis/dist/vis.css">
@@ -45,26 +27,21 @@ class SpoggyVis extends LitElement {
       background: linear-gradient(to bottom, rgba(55, 55, 255, 0.2), rgba(200, 200, 10, 0.2));
     }
     </style>
-
     <vis-input id="visInput" destinataire="agentVis"></vis-input>
+    Swing Pop
     <div id="mynetwork"></div>
     <vis-popup id="visPopup" parent="agentVis"></vis-popup>
-
     `;
   }
 
-  // properties getter
   static get properties() {
     return {
-      //  id: {type: String, value:""},
+      id: {type: String, value:""},
     };
   }
 
   constructor() {
-    // Always call super() first
     super();
-
-
   }
 
   firstUpdated(){
@@ -212,6 +189,7 @@ class SpoggyVis extends LitElement {
       console.log(app.network)
     }
 
+
     savenode(data){
       this.popup = null;
       console.log("SAVENODE :",data)
@@ -282,32 +260,30 @@ parseTurtle(file){
     console.log(store)
     console.log(store.statements)
     var edges=[];
-    console.log("STORE STATEMENTS",store.statements)
-     app.statements2vis(store.statements)
-
-    /*  if (store.statements.length > 0){
-    store.statements.forEach(function (s){
-    var nodeSujetTemp = {
-    id: s.subject.value,
-    label: s.subject.value,
-    type: "node"
-  };
-  var nodeObjetTemp = {
-  id:  s.object.value,
-  label: s.object.value,
-  type: "node"
-};
-addNodeIfNotExist(app.network, nodeSujetTemp)
-addNodeIfNotExist(app.network, nodeObjetTemp)
-edges.push({from:s.subject.value, to: s.object.value, arrows: 'to', label:s.predicate.value});
-console.log(edges)
-app.network.body.data.edges.update(edges)
-})}*/
-})
-/*let name = store.any(person, VCARD(‘fn’));
-if (name) {
-label.textContent =  name.value; // name is a Literal object
-}*/
+    console.log(store.statements)
+    if (store.statements.length > 0){
+      store.statements.forEach(function (s){
+        var nodeSujetTemp = {
+          id: s.subject.value,
+          label: s.subject.value,
+          type: "node"
+        };
+        var nodeObjetTemp = {
+          id:  s.object.value,
+          label: s.object.value,
+          type: "node"
+        };
+        addNodeIfNotExist(app.network, nodeSujetTemp)
+        addNodeIfNotExist(app.network, nodeObjetTemp)
+        edges.push({from:s.subject.value, to: s.object.value, arrows: 'to', label:s.predicate.value});
+        console.log(edges)
+        app.network.body.data.edges.update(edges)
+      })}
+    })
+    /*let name = store.any(person, VCARD(‘fn’));
+    if (name) {
+    label.textContent =  name.value; // name is a Literal object
+  }*/
 }
 
 
@@ -315,210 +291,6 @@ label.textContent =  name.value; // name is a Literal object
 newGraph(){
   newGraph(this.network)
 }
-
-updateGraph(data){
-  console.log("#############################################################UPDATE GRAPH",data);
-  var app =this;
-  /*  if (message.params.remplaceNetwork){
-  this.network.body.data.nodes.clear();
-  this.network.body.data.edges.clear();
-}*/
-//this.network.body.data.nodes.update(message.data.nodes)
-//this.network.body.data.edges.update(message.data.edges)
-//console.log(this.network)
-this.addResultsToGraph(this.network, data)
-this.network.fit();
-this.network.redraw();
-//console.log(this.network)
-}
-
-addResultsToGraph(network, results){
-  console.debug("addResultsToGraph")
-  var app = this;
-  var nodes = results.nodes;
-  var edges = results.edges;
-//  console.log("Nodes",nodes);
-//  console.log("Edges",edges);
-
-
-  //console.log("NETWORK",app.network)
-//  app.network.options.edges.smooth.type = "continuous";
-//  app.network.options.edges.smooth.forceDirection = "none";
-  /*var options = {
-    physics:{
-      stabilization: false
-    },
-    edges: {
-      smooth: {
-        type: "continuous",
-        forceDirection: "none"
-      }
-    }
-  }
-  app.network.setOptions(options);
-  console.log("NETWORK2",app.network)*/
-  nodes.forEach(function(n){
-    console.log(n)
-    app.addNodeIfNotExist(app.network, n);
-  });
-  app.network.body.data.edges.update(edges)
-  console.log("updated")
-  console.log(app.network)
-}
-
-addNodeIfNotExist(network, data){
-  var existNode = false;
-  console.log("addNodeIfNotExist",data);
-  var nodeId;
-  try{
-    existNode = network.body.data.nodes.get({
-      filter: function(n){
-        return (n.id == data.id || (n.label == data.label)); //  || n.title == data.label
-      }
-    });
-    //console.log(existNode);
-    if (existNode.length == 0){
-      //  console.log("n'existe pas")
-      nodeId =   network.body.data.nodes.add(data)[0];
-    }else{
-      //  console.log("existe")
-      delete data.x;
-      delete data.y
-      nodeId =  network.body.data.nodes.update(data)[0];
-    }
-  }
-  catch (err){
-    console.log(err);
-  }
-}
-
-  statements2vis(statements){
-    console.log("statements2vis")
-    var app = this;
-    var data = {nodes:[], edges:[]};
-    //  var i = 0;
-    statements.forEach(function (statement){
-      console.log(statement)
-      //  i++;
-      //  app.agentImport.send('agentApp', {type: 'message', data: statements.length-i});
-      //  console.log("STATEMENT2VIS", statement)
-      var edges = [];
-      var s = statement.subject;
-      var p = statement.predicate;
-      var o = statement.object;
-      var w = statement.why;
-
-      switch(p.value) {
-        case "http://www.w3.org/2000/01/rdf-schema#label":
-        case "http://xmlns.com/foaf/0.1/label":
-        console.log("LABEL")
-        console.log(s.value)
-        console.log(o.value)
-        var nodeAndLabel = {
-          id: s.value,
-          title: o.value,
-          label: o.value,
-          why: w.value,
-          y:2*Math.random(),
-          type: "node"
-        };
-        console.log(nodeAndLabel)
-        //app.addNodeIfNotExist(app.network, nodeAndLabel)
-        data.nodes.push(nodeAndLabel)
-        break;
-        default:
-        console.log("NON LABEL ",p.value);
-        var edges = [];
-        var nodeSujetTemp;
-        console.log("objet",o)
-        if (s.termType != "BlankNode"){
-          var ls = app.localname(s);
-          console.log(ls)
-          nodeSujetTemp = {
-            id: s.value,
-            title: s.value,
-            label: ls,
-            why: w.value,
-            y:2*Math.random(),
-            type: "node"
-          };
-          console.log(nodeSujetTemp)
-          //app.addNodeIfNotExist(app.network, nodeSujetTemp)
-          data.nodes.push(nodeSujetTemp)
-        }/*else{
-          nodeSujetTemp = {
-          id: s.value,
-          type: "node"
-        };
-      }*/
-
-
-      console.log("objet",o)
-      if (o.termType != "BlankNode"){
-        var lo = app.localname(o);
-        console.log(lo)
-        var nodeObjetTemp = {
-          id:  o.value,
-          title: o.value,
-          label: lo,
-          why: w.value,
-          type: "node"
-        };
-        console.log(nodeObjetTemp)
-        //app.addNodeIfNotExist(app.network, nodeObjetTemp)
-        data.edges.push(nodeObjetTemp)
-      }
-
-      /*  let pArray = p.split("#");
-      //  console.log(conceptCut);
-      let labelP = pArray[pArray.length-1];
-      if (labelP == p){
-      pArray = p.split("/");
-      //console.log(conceptCut);
-      labelP = pArray[pArray.length-1];
-    }*/
-
-    data.edges.push({from:s.value, to: o.value, arrows: 'to', label: app.localname(p), uri: p.value});
-    //  app.addEdgeIfNotExist(app.network,{from:s.subject.value, to: s.object.value, arrows: 'to', label:s.predicate.value});
-
-    //app.network.body.data.edges.update(edges)
-  }
-});
-console.log("DATA dans statements2vis",data)
-//return data;
-//console.log("\n\nDATA\n\n",data)
-app.updateGraph(data)
-}
-
-localname(node){
-  console.log("LOCALNAME OF ",node)
-  if (node.value != undefined){
-    var value = node.value;
-    console.log(value)
-    if (value.endsWith('/') || value.endsWith('#')){
-      value = value.substring(0,value.length-1);
-    }
-    var labelU = value;
-
-    if (node.termType == "NamedNode"){
-      console.log("namenode")
-      var uLabel = value.split("#");
-      var labelU = uLabel[uLabel.length-1];
-      if (labelU == uLabel){
-        uLabel = value.split("/");
-        labelU = uLabel[uLabel.length-1];
-      }
-    }else{
-      console.log("literal or blanknode ???")
-    }
-    console.log(labelU)
-    return labelU;
-  }else{
-    console.log("TODO node.value = undefined, il faut maintenant traiter le tableau",node.elements)
-  }
-
-}
-
 
 exportTtl(){
   var output = exportTtl(this.network)
@@ -551,10 +323,6 @@ console.log('attribute change: ', name, oldval, newval);
 super.attributeChangedCallback(name, oldval, newval);
 }*/
 
-
-
-
 }
 
-// Register the new element with the browser.
-customElements.define('spoggy-vis', SpoggyVis);
+window.customElements.define('spoggy-vis', SpoggyVis);

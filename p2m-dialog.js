@@ -26,6 +26,9 @@ import { DialogAgent } from './agents/DialogAgent.js'
 
 import "./solid/solid-login.js";
 
+import { SharedStyles } from './solid/shared-styles.js';
+import { SolidStyles } from './solid/solid-styles.js';
+
 
 
 /**
@@ -48,6 +51,8 @@ class P2mDialog extends LitElement {
     * the element template.
     */
     return html`
+    ${SharedStyles}
+    ${SolidStyles}
     <style>
     .mood { color: green; }
     #operation {
@@ -312,7 +317,7 @@ class P2mDialog extends LitElement {
         super();
         this.foo = 'Hello World';
         this.agentDialog = new DialogAgent("agentDialog", this);
-        console.log(this.agentDialog);
+      //  console.log(this.agentDialog);
         this.params = {};
         this.isValidUrl = false;
         this.providers = [{name:"solid community", suffix:"solid.community"}, {name:"Inrupt", suffix:"inrupt.net"}, {name:"Solid Test Space", suffix:"solidtest.space"}]
@@ -321,7 +326,7 @@ class P2mDialog extends LitElement {
       firstUpdated() {
         console.log("PARAMS FirstUpdate", this.params)
         this.shadowRoot.getElementById("inputSource").value = this.params.source;
-        this.shadowRoot.getElementById("accueilPopup").toggle();
+      //  this.shadowRoot.getElementById("accueilPopup").toggle();
         try {
           new URL(this.params.source);
           this.isValidUrl = true;
