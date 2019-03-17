@@ -4,7 +4,7 @@
 * @constructor
 * @extend eve.Agent
 */
-export function CurrentAgent(id, app) {
+export function LoginAgent(id, app) {
   // execute super constructor
   eve.Agent.call(this, id);
   this.app = app;
@@ -13,24 +13,24 @@ export function CurrentAgent(id, app) {
 }
 
 // extend the eve.Agent prototype
-CurrentAgent.prototype = Object.create(eve.Agent.prototype);
-CurrentAgent.prototype.constructor = CurrentAgent;
+LoginAgent.prototype = Object.create(eve.Agent.prototype);
+LoginAgent.prototype.constructor = LoginAgent;
 
 /**
 * Send a greeting to an agent
 * @param {String} to
 */
-CurrentAgent.prototype.sayHello = function(to) {
+LoginAgent.prototype.sayHello = function(to) {
   this.send(to, 'Hello ' + to + '!');
 };
 
 /**
 * Handle incoming greetings. This overloads the default receive,
-* so we can't use CurrentAgent.on(pattern, listener) anymore
+* so we can't use LoginAgent.on(pattern, listener) anymore
 * @param {String} from     Id of the sender
 * @param {*} message       Received message, a JSON object (often a string)
 */
-CurrentAgent.prototype.receive = function(from, message) {
+LoginAgent.prototype.receive = function(from, message) {
 
   if (typeof message == String && message.indexOf('Hello') === 0) {
     // reply to the greeting

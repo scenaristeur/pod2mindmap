@@ -5,7 +5,7 @@ import  '/node_modules/evejs/dist/eve.custom.js';
 import { IdeAgent } from './agents/IdeAgent.js'
 import "./solid-current.js";
 import "./solid-foldermenu.js";
-import "./solid-filemanager.js";
+//import "./solid-filemanager.js";
 //import "./solid-foldermanager.js";
 // PB ACE.JS
 import "./solid-fileeditor.js";
@@ -76,70 +76,6 @@ class SolidIde extends LitElement {
 
     this.fc = SolidFileClient;
 
-
-    solid.auth.trackSession(session => {
-      if (!session){
-        console.log('The user is not logged in')
-        this.connected = false;
-        this.session = {};
-        this.session.webId=null;
-        app.context = null;
-        //app.$.podInput.value = ""
-        app.current.value.url = "https://smag0.solid.community/public/"
-        app.thing = {}
-        this.agentIde.send('agentMessage', {type: 'message', message: "deconnecté" });
-      }
-      else{
-        console.log(`The user is ${session.webId}`)
-        this.connected = true;
-        this.session = session;
-        app.context = {}
-        app.context.wedId = session.webId;
-
-        app.context.me = $rdf.sym(session.webId)
-        app.store = $rdf.graph() // Make a Quad store
-        app.fetcher = $rdf.fetcher(app.store) // Attach a web I/O module, store.fetcher
-        app.store.updater = new $rdf.UpdateManager(app.store) // Add real-time live updates store.updater
-        app.context.profileDocument = app.context.me.doc()
-        console.log(app.context.me)
-        console.log(app.fetcher)
-        console.log(app.store)
-        console.log("PROFILEDOC ",app.context.profileDocument)
-        var wedIdSpilt = session.webId.split("/");
-        this._webIdRoot = wedIdSpilt[0]+"//"+wedIdSpilt[2]+"/";
-        console.log(this._webIdRoot);
-        app.current.value.url = this._webIdRoot+"public/";
-
-        //PROFILE
-        /*
-        var person = session.webId
-        await app.fetcher.load(person);
-        const fullName = app.store.any($rdf.sym(person), this.FOAF('name'));
-        console.log(fullName)
-        const friends = app.store.each($rdf.sym(person), this.FOAF('knows'));
-
-        friends.forEach(async (friend) => {
-        await app.fetcher.load(friend);
-        const fullName = app.store.any(friend, FOAF('name'));
-        console.log(fullName && fullName.value || friend.value);
-      });*/
-
-
-      this.agentIde.send('agentMessage', {type: 'message', message: "connection :"+session.wedId });
-    }
-    app.url = app.current.value.url;
-    //app.go()
-    console.log(app.context)
-    this.thing.url = this.url;
-    console.log(this.thing)
-    var thing = this.thing;
-    //  this.current = await this.st.get(this.thing);
-    //    console.log("RESULT : ",this.current)
-
-    this.readFolder(this.url);
-    this.readFile(this.url)
-
-  })
 }
 
 

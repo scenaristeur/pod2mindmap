@@ -1,19 +1,9 @@
-/**
-@license
-Copyright (c) 2018 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
-*/
-
 import { LitElement, html } from 'lit-element';
 import '@polymer/paper-button/paper-button.js';
+import  '/node_modules/evejs/dist/eve.custom.js';
+import { LoginAgent } from './agents/LoginAgent.js'
 
-// This is a reusable element. It is not connected to the store. You can
-// imagine that it could just as well be a third-party element that you
-// got from someone else.
+
 class SolidLogin extends LitElement {
   render() {
     return html`
@@ -32,29 +22,95 @@ class SolidLogin extends LitElement {
   }
 
   static get properties() { return {
-    connected: {type: Boolean}
+    connected:  Boolean,
+    session: Object,
+    //current: String,
   }};
 
   constructor() {
     super();
     this.connected = false;
-  }
-  firstUpdated(){
-  //  super.connectedCallback();
-    //console.log(solid)
-    //console.log($rdf)
-    //this.status = "inconnu"
+    this.session = null;
+  //  this.current = "";
 
+      this.agentLogin = new LoginAgent("agentLogin", this);
+      console.log(this.agentLogin);
+    }
+
+  firstUpdated(){
     solid.auth.trackSession(session => {
       if (!session){
         console.log('The user is not logged in')
-        this.connected = false
+        this.connected = false;
+        this.session = {};
+        this.updateAll()
+        //this.current = "https://smag0.solid.community/public/";
+      //  this.current = "def";
+      //  console.log(this.current)
+      //  this.agentLogin.send('agentCurrent', {type: 'currentChanged', current: this.current });
+        /*this.session.webId=null;
+        this.context = null;
+        //app.$.podInput.value = ""
+        this.current.value.url = "https://smag0.solid.community/public/"
+        this.agentIde.send('agentMessage', {type: 'message', message: "deconnecté" });*/
       }
       else{
         console.log(`The user is ${session.webId}`)
-        this.connected = true
-      }
-    })
+        this.connected = true;
+        this.session = session;
+        /*console.log("SESSION",this.session);
+        var wedIdSpilt = this.session.webId.split("/");
+        this._webIdRoot = wedIdSpilt[0]+"//"+wedIdSpilt[2]+"/";
+        console.log(this._webIdRoot);
+        this.current= this._webIdRoot+"public/";*/
+        this.updateAll()
+
+
+      /*  this.context = {}
+        this.context.wedId = session.webId;
+
+        this.context.me = $rdf.sym(session.webId)
+        this.store = $rdf.graph() // Make a Quad store
+        this.fetcher = $rdf.fetcher(app.store) // Attach a web I/O module, store.fetcher
+        this.store.updater = new $rdf.UpdateManager(app.store) // Add real-time live updates store.updater
+        this.context.profileDocument = app.context.me.doc()
+        console.log(this.context.me)
+        console.log(this.fetcher)
+        console.log(// TEMP: his..store)
+        console.log("PROFILEDOC ",this.context.profileDocument)
+        var wedIdSpilt = this.session.webId.split("/");
+        this._webIdRoot = wedIdSpilt[0]+"//"+wedIdSpilt[2]+"/";
+        console.log(this._webIdRoot);
+        this.current.value.url = this._webIdRoot+"public/";*/
+
+        //PROFILE
+        /*
+        var person = session.webId
+        await app.fetcher.load(person);
+        const fullName = app.store.any($rdf.sym(person), this.FOAF('name'));
+        console.log(fullName)
+        const friends = app.store.each($rdf.sym(person), this.FOAF('knows'));
+
+        friends.forEach(async (friend) => {
+        await app.fetcher.load(friend);
+        const fullName = app.store.any(friend, FOAF('name'));
+        console.log(fullName && fullName.value || friend.value);
+      });*/
+
+
+    //  this.agentLogin.send('agentMessage', {type: 'message', message: "connection :"+this.session.wedId });
+    }
+    /*this.url = this.current.value.url;
+    //app.go()
+    console.log(this.context)
+    this.readFolder(this.url);
+    this.readFile(this.url)*/
+
+  })
+  }
+  updateAll(){
+    console.log(this.session)
+    this.agentLogin.send('agentCurrent', {type: 'sessionChanged', session: this.session });
   }
 
   async _popupLogin() {
@@ -67,8 +123,7 @@ class SolidLogin extends LitElement {
   }
 
   _logout(){
-    solid.auth.logout()
-    .then(() => alert('Goodbye!'));
+    solid.auth.logout().then(() => alert('Goodbye!'));
   }
 
 }

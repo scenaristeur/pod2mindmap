@@ -22,23 +22,24 @@ import { SolidTools } from "./solid-tools.js"
 class SolidCurrent extends LitElement {
   render() {
     return html`
-    <paper-input id="currentInput" label="Current Folder / Dossier Courant" value="${this.current.value.url}"></paper-input>
-    <paper-button id="goBtn" raised   @click="${this.go}">Go</paper-button>
+    <paper-input id="webIdInput" label="WebId" value="${this.webId}"></paper-input>
+    <paper-input id="currentInput" label="Current Folder / Dossier Courant" value="${this.current}"></paper-input>
+    <paper-button id="profileBtn" raised  disabled @click="${this.go}">Profile</paper-button>
+    <paper-button id="goBtn" raised  @click="${this.go}">/public</paper-button>
+    <paper-button id="friendsBtn" raised  disabled @click="${this.go}">Friends</paper-button>
+    <paper-button id="privateBtn" raised  disabled @click="${this.go}">/private</paper-button>
     `;
   }
 
   static get properties() {
     return {
-      current: {type: Object},
+      current: String,
     }
   }
 
   constructor(){
     super();
-    this.current = {}
-    this.current.value = {};
-    this.current.value.url = "https://smag0.solid.community/public/";
-    this.current.key = "folder"
+    this.current = "init"
   }
 
   connectedCallback(){
@@ -46,21 +47,35 @@ class SolidCurrent extends LitElement {
     var app = this;
     //console.log( 'id : ', this.id);
     this.agentCurrent = new CurrentAgent("agentCurrent", this);
-//    console.log(this.agentCurrent);
-}
+    //    console.log(this.agentCurrent);
+  }
 
-go(){
-  this.current = this.shadowRoot.getElementById("currentInput").value;
-  this.agentCurrent.send('agentFoldermenu', {type: 'currentChanged', current: this.current });
-  this.agentCurrent.send('agentFileeditor', {type: 'currentChanged', current: this.current });
-  this.agentCurrent.send('agentGraph', {type: 'currentChanged', current: this.current });
+  go(){
+    this.current = this.shadowRoot.getElementById("currentInput").value;
+    this.agentCurrent.send('agentFoldermenu', {type: 'currentChanged', current: this.current });
+    this.agentCurrent.send('agentFileeditor', {type: 'currentChanged', current: this.current });
+    this.agentCurrent.send('agentGraph', {type: 'currentChanged', current: this.current });
 
-}
+  }
 
-currentChanged(current){
-  console.log(current)
-  this.current = current;
-}
+  currentChanged(current){
+    console.log(current)
+    this.current = current;
+  }
+
+  sessionChanged(session){
+    console.log("SESSION in CURRENT",session)
+    if(Object.keys(session).length == 0){
+      this.current= "https://smag0.solid.community/public/DEFO";
+      this.webId = "https://smag0.solid.community/profile/card#me/DEFO";
+    }else{
+      this.webId = session.webId;
+      var wedIdSpilt = session.webId.split("/");
+      var webIdRoot = wedIdSpilt[0]+"//"+wedIdSpilt[2]+"/";
+      //console.log(this._webIdRoot);
+      this.current = webIdRoot+"public/";
+    }
+  }
 
 }
 
