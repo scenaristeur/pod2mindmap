@@ -28,7 +28,7 @@ class MyPrincipal extends LitElement{
     </vaadin-split-layout>
     <div style="width: 50%;">
     <my-second>Chargement du Graphe</my-second>
-        <my-messages></my-messages>
+    <my-messages></my-messages>
     </div>
     </vaadin-split-layout>
     <p2m-source></p2m-source>

@@ -37,7 +37,8 @@ class SolidCurrent extends LitElement {
     super();
     this.current = {}
     this.current.value = {};
-    this.current.value.url = "https://smag0.solid.community/public/"
+    this.current.value.url = "https://smag0.solid.community/public/";
+    this.current.key = "folder"
   }
 
   connectedCallback(){
