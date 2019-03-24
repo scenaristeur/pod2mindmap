@@ -37,6 +37,7 @@
     "@polymer/paper-slider": "^3.0.1",
     "@vaadin/vaadin-split-layout": "^4.1.0",
     "app-menu-polymer3": "github:savsgio/app-menu-polymer3",
+    "browserify": "^16.2.3",
     "evejs": "github:scenaristeur/evejs",
     "heavy-navbar": "0.0.9",
     "lit-element": "^2.0.1",
