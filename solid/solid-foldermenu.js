@@ -40,7 +40,7 @@ class SolidFoldermenu extends LitElement {
     <tr>
     <td>
 
-    <paper-item raised @click="${(e) =>  this.parent()}"> <img src="./assets/folder.png" />${this.folder.parent}</paper-item>
+    <paper-item raised @click="${(e) =>  this.parent()}">...${this.folder.parent}</paper-item>
     ${this.folder.folders.map(i => html`
       <paper-item raised @click="${(e) =>  this.get(i)}"> <img src="./assets/folder.png" />${i.name}</paper-item>
       `)}
@@ -101,38 +101,43 @@ class SolidFoldermenu extends LitElement {
         console.log("folder changed",folder)
         this.folder = folder;
       }
-      /*currentChanged(current){
-      console.log(current)
-      this.current= current;
-      if(current.key == "folder"){
-      this.folder = current.value
-      console.log("FOLDER NEW :",this.folder)
-    }
-  }*/
-  parent(){
-    console.log("parent",this.folder.parent)
-    this.agentFoldermenu.send('agentIde', {type: 'folderChanged', folder: this.folder.parent });
-  }
-  get(item){
-    //  console.log("GET,", e.model.item)
-    /*console.log(this.public)
-    this.thing.url = this.public;*/
-    //  var thing = item;
-    console.log(item)
-    /*  var res = await this.st.get(thing);
-    console.log("RESULT : ",res)
-    if (res.key == "folder"){
-    this.folder = res.value;
+
+      currentChanged(current){
+        console.log(current)
+        this.current= current;
+        if(current.type == "folder"){
+          this.folder = current.url
+          console.log("FOLDER NEW :",this.folder)
+        }
+      }
+      
+      parent(){
+        console.log("parent",this.folder.parent)
+        var current = {}
+        current.url = this.folder.parent
+        this.agentFoldermenu.send('agentIde', {type: 'currentChanged', current: current });
+      }
+
+      get(item){
+        //  console.log("GET,", e.model.item)
+        /*console.log(this.public)
+        this.thing.url = this.public;*/
+        //  var thing = item;
+        console.log(item)
+        /*  var res = await this.st.get(thing);
+        console.log("RESULT : ",res)
+        if (res.key == "folder"){
+        this.folder = res.value;
+      }else{
+      console.log("traitement d'un fichier")
+      this.current = res;
+    }*/
+    //  this.agentFoldermenu.send('agentFileeditor', {type: 'currentChanged', current: res });
+    //  this.agentFoldermenu.send('agentGraph', {type: 'currentChanged', current: res });
+    /*if (item.type == "folder"){
+    this.agentFoldermenu.send('agentIde', {type: 'folderChanged', folder: item.url });
   }else{
-  console.log("traitement d'un fichier")
-  this.current = res;
-}*/
-//  this.agentFoldermenu.send('agentFileeditor', {type: 'currentChanged', current: res });
-//  this.agentFoldermenu.send('agentGraph', {type: 'currentChanged', current: res });
-/*if (item.type == "folder"){
-this.agentFoldermenu.send('agentIde', {type: 'folderChanged', folder: item.url });
-}else{
-this.agentFoldermenu.send('agentIde', {type: 'fileChanged', file: item.url });
+  this.agentFoldermenu.send('agentIde', {type: 'fileChanged', file: item.url });
 }*/
 this.agentFoldermenu.send('agentIde', {type: 'currentChanged', current: item });
 

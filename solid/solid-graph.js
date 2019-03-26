@@ -93,7 +93,7 @@ class SolidGraph extends LitElement {
 
 
 
-  async nodeChanged(node){
+  /*async nodeChanged(node){
     var thing = {};
     thing.url = node.id;
     this.current =  await this.st.get(thing);
@@ -102,7 +102,7 @@ class SolidGraph extends LitElement {
     this.agentGraph.send('agentFileeditor', {type: 'currentChanged', current: this.current });
     this.agentGraph.send('agentFoldermenu', {type: 'currentChanged', current: this.current });
     this.currentChanged(this.current)
-  }
+  }*/
 
   folder2vis(sfolder){
     var app = this;
@@ -116,14 +116,14 @@ class SolidGraph extends LitElement {
 
     var nodes = [];
     var edges = [];
-    nodes.push({id: url, label: name, type: "folder"});
-    nodes.push({id:'folders', label:"Folder"});
-    edges.push({from:url, to: 'folders', arrows: 'to', label:"type"});
+    nodes.push({id: url, label: name, type: "folder", shape: "image", image: "assets/folder.png"});
+  /*  nodes.push({id:'folders', label:"Folder"});
+    edges.push({from:url, to: 'folders', arrows: 'to', label:"type"});*/
     //console.log("PAREnT", parent)
 
     if (parent != undefined){
       //  console.log("undef")
-      nodes.push({id: parent, label: parent, type: "folder"});
+      nodes.push({id: parent, label: parent, type: "folder", shape: "image", image: "assets/folder.png"});
       edges.push({from: url, to: parent, arrows:'to', label: "parent"});
     }
     //  {id: "urlNode"+url, label: url},
@@ -145,24 +145,24 @@ class SolidGraph extends LitElement {
       sfolder.folders.forEach(function(fo){
         if(fo.name != ".."){
           app.folder2vis(fo)
-          var node = {id:fo.url, label:fo.name, type: 'folder'}
+          var node = {id:fo.url, label:fo.name, type: 'folder', shape: "image", image:"assets/folder.png"}
           //  console.log(node)
           nodes.push(node);
           edges.push({from:url, to: fo.url, arrows: 'to', label:"folder"});
-          edges.push({from:fo.url, to: 'folders', arrows: 'to', label:"type"});
+        /*  edges.push({from:fo.url, to: 'folders', arrows: 'to', label:"type"});*/
         }
       })
     }
     if (sfolder.files && sfolder.files.length > 0){
-      nodes.push({id:'files', label:"File"});
+      //nodes.push({id:'files', label:"File"});
       sfolder.files.forEach(function(fi){
-        //  console.log(fi)
+          console.log("FILE",fi)
         //  app.file2vis(fi)
-        var node = {id:fi.url, label:fi.label, type: 'file'};
+        var node = {id:fi.url, label:fi.label, type: fi.type, shape: "image", image: "assets/document.png"};
         //  console.log(node)
         nodes.push(node);
         edges.push({from:url, to: fi.url, arrows: 'to', label:"file"});
-        edges.push({from:fi.url, to: 'files', arrows: 'to', label:"type"});
+      /*  edges.push({from:fi.url, to: 'files', arrows: 'to', label:"type"});*/
       })
     }
 
