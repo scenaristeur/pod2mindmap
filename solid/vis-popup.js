@@ -43,7 +43,7 @@ class VisPopup extends LitElement {
     </style>
     Web Components are <span class="mood">${this.mood}</span>!<br>
     Shape : ${this.selectedShape}<br>
-    Color : ${this.colorValue}
+
     <hr>
 
     <paper-dialog id="nodePopUp" class="popup" backdrop transition="core-transition-bottom"  >
@@ -61,7 +61,7 @@ class VisPopup extends LitElement {
     <!--  <div slot="collapse-content">-->
     <!--  <fieldset>
     <legend>Forme</legend> -->
-    selected="${this.selectedShape}"
+
 
 
     <iron-selector
@@ -100,13 +100,20 @@ class VisPopup extends LitElement {
     <legend>Couleur</legend>-->
     <!--  <paper-swatch-picker color="#E91E63"></paper-swatch-picker>
     <paper-swatch-picker color="{{selectedColor}}"></paper-swatch-picker>-->
-    color: ${this.colorValue}
+    <div>
+
     <color-picker
     id="colorpicker"
-    native value="colorValue"
-    colorValue="colorValue"
-    position="right"
+    position="top"
+    native
+    alpha="${this.alpha}"
+    r="${this.r}"
+    g="${this.g}"
+    b="${this.b}"
     ></color-picker>
+
+    </div>
+
     <!--  </fieldset> -->
     <!--</div>-->
     </paper-collapse-item>
@@ -241,15 +248,19 @@ class VisPopup extends LitElement {
       mood: {type: String},
       parent: {type: String},
       selectedShape: {type: String},
-      colorValue: {type: Object}
+    //  colorValue: {type: Object},
+      alpha: Number
     };
   }
 
   constructor() {
     super();
     this.mood = 'vis-popup';
-    this.colorValue = "rgb(173,208,255)";
+    this.r = 173;
+    this.g = 208;
+    this.b = 255;
     this.selectedShape = "box";
+    this.alpha = 1;
   }
 
 
@@ -266,10 +277,7 @@ class VisPopup extends LitElement {
     //console.log(this.selectedShape)
   }
 
-  _colorChanged(e){
-    console.log(e)
-    console.log(this.colorValue)
-  }
+
 
 
   firstUpdated(){
@@ -342,7 +350,8 @@ editNode(data, callback, callback2){
   this.selectedType = data.type || "normal";
   //  this.imageUrl = data.image || "";
   if ((data.color != undefined) && (data.color.background != undefined)){
-    this.colorValue = data.color.background
+    //this.colorValue = data.color.background
+    console.log(data.color.background)
   }
   else{
     this.colorValue =   "rgb(173,208,255)";
@@ -376,11 +385,17 @@ saveNodeData (data, callback, callback2) {
   spoggy-graph.html:378 tap
   */
   console.log(this.shadowRoot.getElementById("colorpicker"))
+  var colorpicker = this.shadowRoot.getElementById("colorpicker")
+  console.log(colorpicker.r)
+  console.log(colorpicker.g)
+  console.log(colorpicker.b)
+  console.log(colorpicker.alpha)
   console.log(this.shadowRoot.getElementById("shapeSelector"))
   data.label = this.shadowRoot.getElementById("nodeLabel").value;
   data.shape = this.selectedShape;
-  data.color = this.colorValue;
+  data.color = "rgba("+colorpicker.r+","+colorpicker.g+","+colorpicker.b+")";
   //  data.image = this.shadowRoot.getElementById("imgUrl").value;
+  console.log(data.color)
 
   data.type = this.selectedType;
   if (data.label.length > 40){
