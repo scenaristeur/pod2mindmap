@@ -40,7 +40,7 @@
     "browserify": "^16.2.3",
     "evejs": "github:scenaristeur/evejs",
     "heavy-navbar": "0.0.9",
-    "lit-element": "^2.0.1",
+    "lit-element": "^2.1.0",
     "paper-collapse-item": "^4.0.5",
     "rdflib": "^0.19.1",
     "solid-auth-client": "^2.3.0",
