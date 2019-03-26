@@ -25,9 +25,9 @@ class SolidGraph extends LitElement {
   render() {
     return html`
     <!--PB si on supprime la ligne suivante mais pourquoi ? SUR LIGNE SUIVANTE  : attributeValue is null -->
-    <paper-input hidden id="currentInput" label="Current Folder / Dossier Courant" value="${this.current.value.url}"></paper-input>
+    <paper-input hidden id="currentInput" label="Current Folder / Dossier Courant" value="${this.current.url}"></paper-input>
     <spoggy-vis id="spoggy-vis" current=${this.current} data=${this.data}></spoggy-vis>
-  <!--  <my-graph></my-graph> -->
+    <!--  <my-graph></my-graph> -->
     `;
   }
 
@@ -37,9 +37,9 @@ class SolidGraph extends LitElement {
       fetcher: Object,
       context: Object,
       webId: Object,
-    //  public: String,
+      //  public: String,
       current: Object,
-    //  thing: Object,
+      //  thing: Object,
       data: {type: Object}
     }
   }
@@ -81,12 +81,10 @@ class SolidGraph extends LitElement {
     console.log(current)
     this.current = current;
     this.agentGraph.send('agentVis', {type: 'clear' });
-    if (this.current.key == "folder"){
-      this.folder2vis(this.current.value)
-    }else if (this.current.key == "file"){
+    if (this.current.type == "folder"){
+      this.folder2vis(this.current)
+    }else {
       this.file2vis(this.current)
-    }else{
-      console.log("Current.key inconnu",current.key)
     }
   }
 
@@ -124,7 +122,7 @@ class SolidGraph extends LitElement {
     //console.log("PAREnT", parent)
 
     if (parent != undefined){
-    //  console.log("undef")
+      //  console.log("undef")
       nodes.push({id: parent, label: parent, type: "folder"});
       edges.push({from: url, to: parent, arrows:'to', label: "parent"});
     }
@@ -148,7 +146,7 @@ class SolidGraph extends LitElement {
         if(fo.name != ".."){
           app.folder2vis(fo)
           var node = {id:fo.url, label:fo.name, type: 'folder'}
-        //  console.log(node)
+          //  console.log(node)
           nodes.push(node);
           edges.push({from:url, to: fo.url, arrows: 'to', label:"folder"});
           edges.push({from:fo.url, to: 'folders', arrows: 'to', label:"type"});
@@ -158,10 +156,10 @@ class SolidGraph extends LitElement {
     if (sfolder.files && sfolder.files.length > 0){
       nodes.push({id:'files', label:"File"});
       sfolder.files.forEach(function(fi){
-      //  console.log(fi)
+        //  console.log(fi)
         //  app.file2vis(fi)
         var node = {id:fi.url, label:fi.label, type: 'file'};
-      //  console.log(node)
+        //  console.log(node)
         nodes.push(node);
         edges.push({from:url, to: fi.url, arrows: 'to', label:"file"});
         edges.push({from:fi.url, to: 'files', arrows: 'to', label:"type"});

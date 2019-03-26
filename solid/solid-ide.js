@@ -23,6 +23,7 @@ import "./ide-filemanager.js";
 import "./ide-foldermanager.js";
 import "./ide-optionsmanager.js";
 import "spoggy-graph/spoggy-graph.js";*/
+//import {SolidTools} from "./solid-tools.js";
 
 class SolidIde extends LitElement {
   render() {
@@ -61,6 +62,7 @@ class SolidIde extends LitElement {
     this.context = {};
     this.current = {value: {url: ""}};
     this.thing = {};
+
     // NAMESPACES : https://github.com/solid/solid-namespace/blob/master/index.js
     /*this.VCARD = $rdf.Namespace('http://www.w3.org/2006/vcard/ns#');
     this.SPACE = $rdf.Namespace('http://www.w3.org/ns/pim/space#');
@@ -76,38 +78,56 @@ class SolidIde extends LitElement {
 
     this.fc = SolidFileClient;
 
-}
+    //this.st = new SolidTools();
+    //  console.log(this.st)
 
 
-
-readFolder(url){
-  var app = this;
-  this.fc.readFolder(url).then(folder => {
-    app.folder = folder;
-    console.log("Folder",folder)
-    console.log(`Read ${folder.name}, it has ${folder.files.length} files.`);
-    app.agentIde.send('agentFoldermenu', {type: 'folderChanged', folder: folder });
-    this.agentIde.send('agentMessage', {type: 'message', message: "folder name  :"+folder.name });
-  }, err =>
-  {
-    console.log(err)
   }
 
-);
+  currentChanged(current){
+    console.log("currrentChanged",current)
+    if(! current.type) {
+      current.type = this.fc.guessFileType(current.url)
+    }else {
+      console.log("type connu", current)
+    }
+    if (current.type == "folder"){
+      this.readFolder(current)
+    }else{
+      this.readFile(current)
+    }
+  }
+  
+
+  readFolder(current){
+    var app = this;
+    console.log("READFOLDER",current)
+    this.fc.readFolder(current.url).then(folder => {
+      app.folder = folder;
+      console.log("Folder",folder)
+      console.log(`Read ${folder.name}, it has ${folder.files.length} files.`);
+      app.agentIde.send('agentFoldermenu', {type: 'folderChanged', folder: folder });
+      this.agentIde.send('agentGraph', {type: 'currentChanged', current: folder });
+      this.agentIde.send('agentMessage', {type: 'message', message: "folder name  :"+folder.name });
+    }, err =>
+    {
+      console.log(err)
+    }
+  );
 }
 
-readFile(url){
+readFile(current){
+  console.log("READFILE",current)
   var app = this;
-  var file= {};
+  /*  var file= {};
   file.value = {};
   file.value.url = url;
-  file.key = "file";
-  this.agentIde.send('agentGraph', {type: 'currentChanged', current: file });
-  this.fc.readFile(url).then(  body => {
+  file.key = "file";*/
+  this.agentIde.send('agentGraph', {type: 'currentChanged', current: current });
+  this.fc.readFile(current.url).then(  body => {
     app.fileContent = body
-  //  console.log(`File content is : ${body}.`);
+    //  console.log(`File content is : ${body}.`);
     this.agentIde.send('agentFileeditor', {type: 'contentChanged', content: body });
-
   }, err => console.log(err) );
 }
 

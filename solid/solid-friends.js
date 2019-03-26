@@ -25,11 +25,11 @@ class SolidFriends extends LitElement {
     return html`
     ${SharedStyles}
     ${SolidStyles}
-    <paper-collapse-item header="Friends ${this.friends.length}" opened>
+    <paper-collapse-item header="Friends ${this.friends.length}">
     ${this.friends.map(i => html`
       <paper-item raised @click="${(e) =>  this.get(i)}"> <img src="./assets/folder.png" />${i.name}</paper-item>
       `)}
-        </paper-collapse-item>
+      </paper-collapse-item>
       `;
     }
 

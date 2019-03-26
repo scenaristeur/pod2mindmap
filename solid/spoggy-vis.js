@@ -74,7 +74,7 @@ class SpoggyVis extends LitElement {
     this.agentVis = new VisAgent("agentVis", this);
     console.log(this.agentVis);
     //this.agentVis.send('agentApp', {type: 'dispo', name: this.id });
-
+    this.fc = SolidFileClient;
 
     var container = this.shadowRoot.getElementById('mynetwork');
     //  console.log(container)
@@ -228,33 +228,33 @@ class SpoggyVis extends LitElement {
       this.network.body.data.edges.update(data.edges)
     }
 
-    fileChanged(file){
+    fileChanged(current){
 
-      console.log(file);
+      console.log(current);
 
-      switch(file.value.type) {
-        case "application/json":
-        this.parseJson(file)
-        break;
-        case "text/turtle":
-        this.parseTurtle(file)
-        break;
-        default:
-        this.parseTurtle(file)
+      if(current.type == "application/json"){
+        this.parseJson(current)
+      }else{
+        this.parseTurtle(current)
       }
-
     }
 
 
 
-    parseJson(file){
-      console.log("JSON\n\n")
+    parseJson(current){
+      console.log("JSON",current)
       //  console.log(file.value.content)
-      var data = JSON.parse(file.value.content);
-      console.log(data)
-      //  console.log(typeof data)
-      this.network.body.data.nodes.update(data.nodes)
-      this.network.body.data.edges.update(data.edges)
+
+      this.fc.readFile(current.url).then(  body => {
+        console.log(body)
+        var data = JSON.parse(body);
+        console.log(data)
+        //  console.log(typeof data)
+        this.network.body.data.nodes.update(data.nodes)
+        this.network.body.data.edges.update(data.edges)
+      }, err => console.log(err) );
+
+
       /*  console.log(data.nodes)
       console.log(data.edges)
       data.nodes.forEach(function(n){
@@ -269,6 +269,7 @@ class SpoggyVis extends LitElement {
 
 
 parseTurtle(file){
+  console.log("TURTLE",file)
   var app = this;
   //  console.log(file.value.content)
   //  ttl2Xml(file.value.content, this.network)
@@ -277,13 +278,13 @@ parseTurtle(file){
   console.log(store)
   const fetcher = new $rdf.Fetcher(store);
   console.log(fetcher)
-  fetcher.load(file.value.url).then( response => {
+  fetcher.load(file.url).then( response => {
     console.log(response)
     console.log(store)
     console.log(store.statements)
     var edges=[];
     console.log("STORE STATEMENTS",store.statements)
-     app.statements2vis(store.statements)
+    app.statements2vis(store.statements)
 
     /*  if (store.statements.length > 0){
     store.statements.forEach(function (s){
@@ -337,38 +338,38 @@ addResultsToGraph(network, results){
   var app = this;
   var nodes = results.nodes;
   var edges = results.edges;
-//  console.log("Nodes",nodes);
-//  console.log("Edges",edges);
+  //  console.log("Nodes",nodes);
+  //  console.log("Edges",edges);
 
 
   //console.log("NETWORK",app.network)
-//  app.network.options.edges.smooth.type = "continuous";
-//  app.network.options.edges.smooth.forceDirection = "none";
+  //  app.network.options.edges.smooth.type = "continuous";
+  //  app.network.options.edges.smooth.forceDirection = "none";
   /*var options = {
-    physics:{
-      stabilization: false
-    },
-    edges: {
-      smooth: {
-        type: "continuous",
-        forceDirection: "none"
-      }
-    }
-  }
-  app.network.setOptions(options);
-  console.log("NETWORK2",app.network)*/
-  nodes.forEach(function(n){
-    console.log(n)
-    app.addNodeIfNotExist(app.network, n);
-  });
-  app.network.body.data.edges.update(edges)
-  console.log("updated")
-  console.log(app.network)
+  physics:{
+  stabilization: false
+},
+edges: {
+smooth: {
+type: "continuous",
+forceDirection: "none"
+}
+}
+}
+app.network.setOptions(options);
+console.log("NETWORK2",app.network)*/
+nodes.forEach(function(n){
+  console.log(n)
+  app.addNodeIfNotExist(app.network, n);
+});
+app.network.body.data.edges.update(edges)
+console.log("updated")
+console.log(app.network)
 }
 
 addNodeIfNotExist(network, data){
   var existNode = false;
-//  console.log("addNodeIfNotExist",data);
+  //  console.log("addNodeIfNotExist",data);
   var nodeId;
   try{
     existNode = network.body.data.nodes.get({
@@ -392,97 +393,97 @@ addNodeIfNotExist(network, data){
   }
 }
 
-  statements2vis(statements){
-    console.log("statements2vis")
-    var app = this;
-    var data = {nodes:[], edges:[]};
-    //  var i = 0;
-    statements.forEach(function (statement){
-      console.log(statement)
-      //  i++;
-      //  app.agentImport.send('agentApp', {type: 'message', data: statements.length-i});
-      //  console.log("STATEMENT2VIS", statement)
-      var edges = [];
-      var s = statement.subject;
-      var p = statement.predicate;
-      var o = statement.object;
-      var w = statement.why;
+statements2vis(statements){
+  console.log("statements2vis")
+  var app = this;
+  var data = {nodes:[], edges:[]};
+  //  var i = 0;
+  statements.forEach(function (statement){
+    console.log(statement)
+    //  i++;
+    //  app.agentImport.send('agentApp', {type: 'message', data: statements.length-i});
+    //  console.log("STATEMENT2VIS", statement)
+    var edges = [];
+    var s = statement.subject;
+    var p = statement.predicate;
+    var o = statement.object;
+    var w = statement.why;
 
-      switch(p.value) {
-        case "http://www.w3.org/2000/01/rdf-schema#label":
-        case "http://xmlns.com/foaf/0.1/label":
-        console.log("LABEL")
-        console.log(s.value)
-        console.log(o.value)
-        var nodeAndLabel = {
+    switch(p.value) {
+      case "http://www.w3.org/2000/01/rdf-schema#label":
+      case "http://xmlns.com/foaf/0.1/label":
+      console.log("LABEL")
+      console.log(s.value)
+      console.log(o.value)
+      var nodeAndLabel = {
+        id: s.value,
+        title: o.value,
+        label: o.value,
+        why: w.value,
+        y:2*Math.random(),
+        type: "node"
+      };
+      console.log(nodeAndLabel)
+      //app.addNodeIfNotExist(app.network, nodeAndLabel)
+      data.nodes.push(nodeAndLabel)
+      break;
+      default:
+      console.log("NON LABEL ",p.value);
+      var edges = [];
+      var nodeSujetTemp;
+      console.log("objet",o)
+      if (s.termType != "BlankNode"){
+        var ls = app.localname(s);
+        console.log(ls)
+        nodeSujetTemp = {
           id: s.value,
-          title: o.value,
-          label: o.value,
+          title: s.value,
+          label: ls,
           why: w.value,
           y:2*Math.random(),
           type: "node"
         };
-        console.log(nodeAndLabel)
-        //app.addNodeIfNotExist(app.network, nodeAndLabel)
-        data.nodes.push(nodeAndLabel)
-        break;
-        default:
-        console.log("NON LABEL ",p.value);
-        var edges = [];
-        var nodeSujetTemp;
-        console.log("objet",o)
-        if (s.termType != "BlankNode"){
-          var ls = app.localname(s);
-          console.log(ls)
-          nodeSujetTemp = {
-            id: s.value,
-            title: s.value,
-            label: ls,
-            why: w.value,
-            y:2*Math.random(),
-            type: "node"
-          };
-          console.log(nodeSujetTemp)
-          //app.addNodeIfNotExist(app.network, nodeSujetTemp)
-          data.nodes.push(nodeSujetTemp)
-        }/*else{
-          nodeSujetTemp = {
-          id: s.value,
-          type: "node"
-        };
-      }*/
-
-
-      console.log("objet",o)
-      if (o.termType != "BlankNode"){
-        var lo = app.localname(o);
-        console.log(lo)
-        var nodeObjetTemp = {
-          id:  o.value,
-          title: o.value,
-          label: lo,
-          why: w.value,
-          type: "node"
-        };
-        console.log(nodeObjetTemp)
-        //app.addNodeIfNotExist(app.network, nodeObjetTemp)
-        data.edges.push(nodeObjetTemp)
-      }
-
-      /*  let pArray = p.split("#");
-      //  console.log(conceptCut);
-      let labelP = pArray[pArray.length-1];
-      if (labelP == p){
-      pArray = p.split("/");
-      //console.log(conceptCut);
-      labelP = pArray[pArray.length-1];
+        console.log(nodeSujetTemp)
+        //app.addNodeIfNotExist(app.network, nodeSujetTemp)
+        data.nodes.push(nodeSujetTemp)
+      }/*else{
+        nodeSujetTemp = {
+        id: s.value,
+        type: "node"
+      };
     }*/
 
-    data.edges.push({from:s.value, to: o.value, arrows: 'to', label: app.localname(p), uri: p.value});
-    //  app.addEdgeIfNotExist(app.network,{from:s.subject.value, to: s.object.value, arrows: 'to', label:s.predicate.value});
 
-    //app.network.body.data.edges.update(edges)
-  }
+    console.log("objet",o)
+    if (o.termType != "BlankNode"){
+      var lo = app.localname(o);
+      console.log(lo)
+      var nodeObjetTemp = {
+        id:  o.value,
+        title: o.value,
+        label: lo,
+        why: w.value,
+        type: "node"
+      };
+      console.log(nodeObjetTemp)
+      //app.addNodeIfNotExist(app.network, nodeObjetTemp)
+      data.edges.push(nodeObjetTemp)
+    }
+
+    /*  let pArray = p.split("#");
+    //  console.log(conceptCut);
+    let labelP = pArray[pArray.length-1];
+    if (labelP == p){
+    pArray = p.split("/");
+    //console.log(conceptCut);
+    labelP = pArray[pArray.length-1];
+  }*/
+
+  data.edges.push({from:s.value, to: o.value, arrows: 'to', label: app.localname(p), uri: p.value});
+  //  app.addEdgeIfNotExist(app.network,{from:s.subject.value, to: s.object.value, arrows: 'to', label:s.predicate.value});
+
+  //app.network.body.data.edges.update(edges)
+}
 });
 console.log("DATA dans statements2vis",data)
 //return data;
@@ -491,17 +492,17 @@ app.updateGraph(data)
 }
 
 localname(node){
-//  console.log("LOCALNAME OF ",node)
+  //  console.log("LOCALNAME OF ",node)
   if (node.value != undefined){
     var value = node.value;
-  //  console.log(value)
+    //  console.log(value)
     if (value.endsWith('/') || value.endsWith('#')){
       value = value.substring(0,value.length-1);
     }
     var labelU = value;
 
     if (node.termType == "NamedNode"){
-    //  console.log("namenode")
+      //  console.log("namenode")
       var uLabel = value.split("#");
       var labelU = uLabel[uLabel.length-1];
       if (labelU == uLabel){
@@ -511,7 +512,7 @@ localname(node){
     }else{
       console.log("literal or blanknode ???")
     }
-  //  console.log(labelU)
+    //  console.log(labelU)
     return labelU;
   }else{
     console.log("TODO node.value = undefined, il faut maintenant traiter le tableau",node.elements)
@@ -539,75 +540,75 @@ decortiqueFile(fichier, remplaceNetwork){
 
 catchTriplet(tripletString){
 
-    // console.log(message.length);
-     //message=message.trim();
-     //var tripletString = message.substring(2).trim().split(" ");
-     // les noeuds existent-ils ?
-     var sujetNode = this.network.body.data.nodes.get({
-       filter: function(node){
-         //    console.log(node);
-         return (node.label == tripletString[0] );
-       }
-     });
-     var objetNode = this.network.body.data.nodes.get({
-       filter: function(node){
-         //    console.log(node);
-         return (node.label == tripletString[2]);
-       }
-     });
-     console.log(sujetNode);
-     console.log(objetNode);
-     // sinon, on les créé
-     if (sujetNode.length == 0){
-       this.network.body.data.nodes.add({label: tripletString[0] });
-     }
-     if (objetNode.length == 0){
-       this.network.body.data.nodes.add({ label: tripletString[2] });
-     }
-     // maintenant ils doivent exister, pas très po=ropre comme méthode , à revoir
-     sujetNode = this.network.body.data.nodes.get({
-       filter: function(node){
-         console.log(node);
-         return (node.label == tripletString[0] );
-       }
-     });
-     objetNode = this.network.body.data.nodes.get({
-       filter: function(node){
-         console.log(node);
-         return (node.label == tripletString[2]);
-       }
-     });
-    /* var actionSujet = {};
-     actionSujet.type = "newNode";
-     actionSujet.data = sujetNode[0];
-     //  actionsToSendTemp.push(actionSujet);
-     this.addAction(actionSujet);
-     var actionObjet = {};
-     actionObjet.type = "newNode";
-     actionObjet.data = objetNode[0];
-     //  actionsToSendTemp.push(actionObjet);
-     this.addAction(actionObjet);*/
-     // maintenant, on peut ajouter l'edge
-     this.network.body.data.edges.add({
-       label: tripletString[1],
-       from : sujetNode[0].id,
-       to : objetNode[0].id
-     });
-     //on récupère ce edge pour l'envoyer au serveur
-     var edge = this.network.body.data.edges.get({
-       filter: function(edge) {
-         return (edge.from == sujetNode[0].id && edge.to == objetNode[0].id && edge.label == tripletString[1]);
-       }
-     });
-     console.log("OK")
-     /*var actionEdge = {};
-     actionEdge.type = "newEdge";
-     actionEdge.data = edge;
-     this.addAction(actionEdge);*/
-     //  actionsToSendTemp.push(actionEdge);
-     //console.log(actionsToSendTemp);
-     //  return actionsToSendTemp;
-   }
+  // console.log(message.length);
+  //message=message.trim();
+  //var tripletString = message.substring(2).trim().split(" ");
+  // les noeuds existent-ils ?
+  var sujetNode = this.network.body.data.nodes.get({
+    filter: function(node){
+      //    console.log(node);
+      return (node.label == tripletString[0] );
+    }
+  });
+  var objetNode = this.network.body.data.nodes.get({
+    filter: function(node){
+      //    console.log(node);
+      return (node.label == tripletString[2]);
+    }
+  });
+  console.log(sujetNode);
+  console.log(objetNode);
+  // sinon, on les créé
+  if (sujetNode.length == 0){
+    this.network.body.data.nodes.add({label: tripletString[0] });
+  }
+  if (objetNode.length == 0){
+    this.network.body.data.nodes.add({ label: tripletString[2] });
+  }
+  // maintenant ils doivent exister, pas très po=ropre comme méthode , à revoir
+  sujetNode = this.network.body.data.nodes.get({
+    filter: function(node){
+      console.log(node);
+      return (node.label == tripletString[0] );
+    }
+  });
+  objetNode = this.network.body.data.nodes.get({
+    filter: function(node){
+      console.log(node);
+      return (node.label == tripletString[2]);
+    }
+  });
+  /* var actionSujet = {};
+  actionSujet.type = "newNode";
+  actionSujet.data = sujetNode[0];
+  //  actionsToSendTemp.push(actionSujet);
+  this.addAction(actionSujet);
+  var actionObjet = {};
+  actionObjet.type = "newNode";
+  actionObjet.data = objetNode[0];
+  //  actionsToSendTemp.push(actionObjet);
+  this.addAction(actionObjet);*/
+  // maintenant, on peut ajouter l'edge
+  this.network.body.data.edges.add({
+    label: tripletString[1],
+    from : sujetNode[0].id,
+    to : objetNode[0].id
+  });
+  //on récupère ce edge pour l'envoyer au serveur
+  var edge = this.network.body.data.edges.get({
+    filter: function(edge) {
+      return (edge.from == sujetNode[0].id && edge.to == objetNode[0].id && edge.label == tripletString[1]);
+    }
+  });
+  console.log("OK")
+  /*var actionEdge = {};
+  actionEdge.type = "newEdge";
+  actionEdge.data = edge;
+  this.addAction(actionEdge);*/
+  //  actionsToSendTemp.push(actionEdge);
+  //console.log(actionsToSendTemp);
+  //  return actionsToSendTemp;
+}
 
 
 /*  updated(changedProperties){

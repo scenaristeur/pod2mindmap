@@ -109,7 +109,7 @@ class SolidLogin extends LitElement {
   })
   }
   updateAll(){
-    console.log(this.session)
+  //  console.log(this.session)
     this.agentLogin.send('agentCurrent', {type: 'sessionChanged', session: this.session });
   }
 

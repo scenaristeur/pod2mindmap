@@ -129,11 +129,12 @@ class SolidFoldermenu extends LitElement {
 }*/
 //  this.agentFoldermenu.send('agentFileeditor', {type: 'currentChanged', current: res });
 //  this.agentFoldermenu.send('agentGraph', {type: 'currentChanged', current: res });
-if (item.type == "folder"){
-  this.agentFoldermenu.send('agentIde', {type: 'folderChanged', folder: item.url });
+/*if (item.type == "folder"){
+this.agentFoldermenu.send('agentIde', {type: 'folderChanged', folder: item.url });
 }else{
-  this.agentFoldermenu.send('agentIde', {type: 'fileChanged', file: item.url });
-}
+this.agentFoldermenu.send('agentIde', {type: 'fileChanged', file: item.url });
+}*/
+this.agentFoldermenu.send('agentIde', {type: 'currentChanged', current: item });
 
 }
 
