@@ -46,7 +46,9 @@ CurrentAgent.prototype.receive = function(from, message) {
     case 'sessionChanged':
     this.app.sessionChanged(message.session);
     break;
-
+    case 'webIdChanged':
+    this.app.webIdChanged(message.webId);
+    break;
 
 
     default:

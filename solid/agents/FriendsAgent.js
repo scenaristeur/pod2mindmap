@@ -40,8 +40,8 @@ FriendsAgent.prototype.receive = function(from, message) {
 
 
   switch(message.type){
-    case 'currentChanged':
-    this.app.currentChanged(message.current);
+    case 'webIdChanged':
+    this.app.webIdChanged(message.webId);
     break;
 
 

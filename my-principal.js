@@ -28,12 +28,11 @@ class MyPrincipal extends LitElement{
     </div>
     </vaadin-split-layout>
     <div style="width: 50%;">
-    <my-messages></my-messages>
     <my-second>Ici devrait apparaître un graphe</my-second>
-
+    <my-messages></my-messages>
     </div>
     </vaadin-split-layout>
-  <!--  <p2m-source></p2m-source>
+    <!--  <p2m-source></p2m-source>
     <p2m-dialog></p2m-dialog>
     <solid-explore></solid-explore>-->
     `;

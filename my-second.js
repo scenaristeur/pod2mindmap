@@ -30,11 +30,12 @@ class MySecond extends LitElement {
     * the element template.
     */
     return html`
-        ${SharedStyles}
-        <solid-friends>charge friends</solid-friends>
-        <paper-collapse-item header="Graph" opened>
-        <solid-graph id="spoggy-graph"></solid-graph>
-        </paper-collapse-item>
+    ${SharedStyles}
+
+    <paper-collapse-item header="Graph" opened>
+    <solid-graph id="spoggy-graph"></solid-graph>
+    </paper-collapse-item>
+    <solid-friends>charge friends</solid-friends>
     `;
   }
 

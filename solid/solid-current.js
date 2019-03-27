@@ -26,7 +26,7 @@ class SolidCurrent extends LitElement {
     <paper-input id="currentInput" label="Current Folder / Dossier Courant" value="${this.url}"></paper-input>
     <paper-button id="profileBtn" raised  disabled @click="${this.go}">Profile</paper-button>
     <paper-button id="goBtn" raised  @click="${this.go}">/public</paper-button>
-    <paper-button id="friendsBtn" raised  disabled @click="${this.go}">Friends</paper-button>
+    <paper-button id="friendsBtn" raised   @click="${this.gofriends}">Friends</paper-button>
     <paper-button id="privateBtn" raised  disabled @click="${this.go}">/private</paper-button>
     `;
   }
@@ -68,6 +68,18 @@ class SolidCurrent extends LitElement {
 
   }
 
+  gofriends(){
+    this.webId = this.shadowRoot.getElementById("webIdInput").value;
+  //  var current = {}
+  //  current.url = this.url;
+    /*  this.agentCurrent.send('agentFoldermenu', {type: 'currentChanged', current: this.current });
+    this.agentCurrent.send('agentFileeditor', {type: 'currentChanged', current: this.current });
+    this.agentCurrent.send('agentGraph', {type: 'currentChanged', current: this.current });*/
+    //  console.log("CURRENT",current)
+    this.agentCurrent.send('agentFriends', {type: 'webIdChanged', webId: this.webId });
+
+  }
+
   currentChanged(current){
     console.log("CURRENTCHANGED",current)
   //  this.current = current;
@@ -88,6 +100,15 @@ class SolidCurrent extends LitElement {
     }
   //  console.log("URL",this.url)
   }
+
+    webIdChanged(webId){
+      console.log("webIdChanged",webId)
+      this.webId = webId;
+      var wedIdSpilt = webId.split("/");
+      var webIdRoot = wedIdSpilt[0]+"//"+wedIdSpilt[2]+"/";
+    //  console.log(webIdRoot);
+      this.url = webIdRoot+"public/";
+    }
 
 }
 
