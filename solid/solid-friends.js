@@ -27,6 +27,9 @@ class SolidFriends extends LitElement {
     return html`
     ${SharedStyles}
     ${SolidStyles}
+    fullName : ${this.fullName.value}<br>
+    Role : ${this.role.value}<br>
+    Organization : ${this.organization.value}<br>
     <paper-collapse-item header="Friends ${this.friends.length}">
     ${this.friends.map(i => html`
       <paper-item raised @click="${(e) =>  this.get(i)}"> <img src="./assets/folder.png" />${i.value}</paper-item>
@@ -37,7 +40,10 @@ class SolidFriends extends LitElement {
 
     static get properties() {
       return {
-        friends: Array
+        friends: Array,
+        fullName: Object,
+        organization: Object,
+        role: Object
       }
     }
 
@@ -45,6 +51,9 @@ class SolidFriends extends LitElement {
       super();
 
       this.friends = [{value:"bob"}, {value:"emmer"}, {value:"flok"}]
+      this.fullName = {}
+      this.organization = {}
+      this.role = {}
     }
 
     get(item){
@@ -83,10 +92,14 @@ class SolidFriends extends LitElement {
       console.log("PROFILE :",profile)
       await fetcher.load(webId);
       console.log("STORE 2",store)
-      const fullName = store.any(me, FOAF('name'));
+      this.fullName = store.any(me, FOAF('name'));
       //  let name = store.any(me, VCARD('name'), null, profile);
-      console.log(fullName)
+      console.log(this.fullName)
       const friends = store.each(me, FOAF('knows'));
+      
+      store.statements.forEach(function(s){
+        console.log(s)
+      })
 
 
       console.log("Friends ",friends)
