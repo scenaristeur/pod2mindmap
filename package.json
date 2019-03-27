@@ -42,6 +42,7 @@
     "heavy-navbar": "0.0.9",
     "lit-element": "^2.1.0",
     "paper-collapse-item": "^4.0.5",
+    "polymer-cli": "^1.9.7",
     "rdflib": "^0.19.1",
     "solid-auth-client": "^2.3.0",
     "solid-file-client": "^0.4.9",
