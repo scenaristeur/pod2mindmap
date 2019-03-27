@@ -48,5 +48,8 @@
     "solid-file-client": "^0.4.9",
     "vis": "^4.21.0",
     "web-animations-js": "^2.3.1"
+  },
+  "devDependencies": {
+    "gulp": "^4.0.0"
   }
 }
